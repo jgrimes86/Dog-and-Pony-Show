@@ -127,7 +127,7 @@ class Client_Animal:
             ON client_animals.animal_id = animals.id
             WHERE animals.species = ?
         """
-        events = CURSOR.execute(sql, (type,)).fetchall():
+        events = CURSOR.execute(sql, (type,)).fetchall()
         [print(cls.event_from_row(row)) for row in events]
 
 
@@ -149,12 +149,12 @@ class Client_Animal:
             FROM client_animals
             WHERE id = ?
         """
-        if event := CURSOR.execute(sql, (id,)).fetchone()
+        if event := CURSOR.execute(sql, (id,)).fetchone():
             # get client info from a Client.find_by_id function
             client = None
             # get animal info from an Animal.find_by_id function
             animal = None
-            print(f"{event[0]}: {animal.name} performing at {client.name}'s event.")
+            print(f"{event[0]}: {animal} performing at {client}'s event.")
         else:
             print(f"Event {id} not found")
 
