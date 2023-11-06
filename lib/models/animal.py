@@ -9,6 +9,60 @@ class Animal:
         self.breed= breed
         self.skill= skill
 
+    @property
+    def name(self):
+        return self._name
+    
+    @name.setter
+    def name(self, name):
+        if type(name) == str:
+            self._name= name
+        else:
+            raise TypeError('Name must be a string')
+    
+    @property
+    def species(self):
+        return self._species
+    
+    @species.setter
+    def species(self, species):
+        if not hasattr(self, '_species'):
+            if type(species) == str:
+                if species == 'Dog' or species == 'dog' or species == 'Pony' or species == 'pony':
+                    self._species= species
+                else:
+                    raise ValueError('Species options: dog, pony')
+            else:
+                raise TypeError('Species must be a string')
+        else:
+            raise Exception("Species can't be changed")
+    
+    @property
+    def breed(self):
+        return self._breed
+    
+    @breed.setter
+    def breed(self, breed):
+        if not hasattr(self, '_breed'):
+            if type(breed) == str:
+                self._breed= breed
+            else:
+                raise TypeError('Breed must be a string')
+        else:
+            raise Exception("Breed can't be changed")
+    
+    @property
+    def skill(self):
+        return self._skill
+    
+    @skill.setter
+    def skill(self, skill):
+        if type(skill) == str:
+            self._skill= skill
+        else:
+            raise TypeError('Skill must be a string')
+
+
     def __repr__(self):
         return f"<Animal {self.id}: {self.name}, the {self.species}>"
     
