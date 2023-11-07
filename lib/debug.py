@@ -7,7 +7,6 @@ from models.client import Client
 from models.client_animal import Client_Animal
 from helpers import *
 import ipdb
-# from models.client import Client 
 
 Animal.drop_table()
 Animal.create_table()
