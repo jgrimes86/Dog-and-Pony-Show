@@ -11,12 +11,6 @@ class Client:
 
     def __repr__(self):
         return f"Client {self.id}: Name: {self.name}, Reason: {self.type})" 
-    
-    @classmethod
-    def from_db(cls, row):
-        client_instance= Client(row[1], row[2], row[3])
-        client_instance.id= row[0]
-        return client_instance
 
     @classmethod
     def create_table(cls):
@@ -30,6 +24,12 @@ class Client:
         """
         CURSOR.execute(sql)
         CONN.commit()
+        
+    @classmethod
+    def drop_table(cls):
+        sql= "DROP TABLE clients;"
+        CURSOR.execute(sql)
+        CONN.commit() 
 
     def save(self):
         sql= """
@@ -45,44 +45,37 @@ class Client:
         client.save()
         return client 
     
-    @classmethod
-    def delete(cls, client_id):
+    def delete(self):
         sql= "DELETE FROM clients WHERE id = ?"
-        CURSOR.execute(sql,(client_id,))
+        CURSOR.execute(sql, (self.id,))
         CONN.commit()
+        self.id= None
+
+    @classmethod
+    def from_db(cls, row):
+        client_instance= Client(row[1], row[2], row[3])
+        client_instance.id= row[0]
+        return client_instance
 
     @classmethod
     def find_by_name(cls,name):
         query = "SELECT * FROM clients WHERE name is ?"
         result = CURSOR.execute(query,(name,)).fetchone()
         if result:
-            
-            return (result)
+            return cls.from_db(result)
         else:
             return None
     
     @classmethod
     def display_all_clients(cls):
         rows = CURSOR.execute("SELECT * FROM clients" ).fetchall()
-        
-
-        if len(rows) == 0:
-            print("no clients found")
-        else:
-            print("Clients:")
-            for row in rows:
-                print(row)    
+        return [cls.from_db(row) for row in rows]  
 
     @classmethod
     def view_by_type(cls,type):  
         rows = CURSOR.execute("SELECT * FROM clients WHERE type is ?", (type,)).fetchall()
         return [cls.from_db(row) for row in rows] 
     
-    @classmethod
-    def drop_table(cls):
-        sql= "DROP TABLE clients;"
-        CURSOR.execute(sql)
-        CONN.commit() 
 
     @classmethod
     def find_by_id(cls, id):
