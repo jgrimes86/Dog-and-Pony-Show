@@ -26,7 +26,7 @@ class Client_Animal:
             if datetime.strptime(event_date, "%b %d, %Y"):
                 self._event_date = event_date
         except ValueError:
-            raise ValueError("Date must be in the format of Nov 06, 2023")
+            raise ValueError("Date must match the format of Nov 06, 2023")
 
     @property
     def client_id(self):
@@ -77,6 +77,7 @@ class Client_Animal:
         """
         CURSOR.execute(sql, (self.event_date, self.client_id, self.animal_id))
         CONN.commit()
+        self.id= CURSOR.lastrowid
 
     @classmethod
     def create(cls, event_date, client_id, animal_id):
@@ -84,14 +85,13 @@ class Client_Animal:
         event.save()
         return event
 
-    @classmethod
-    def delete(cls, id):
+    def delete(self):
         sql = """
             DELETE FROM client_animals WHERE id = ?
         """
-        CURSOR.execute(sql, (id,))
+        CURSOR.execute(sql, (self.id,))
         CONN.commit()
-        print(f"Event {id} deleted")
+        self.id = None
 
     @classmethod
     def from_db(self, row):
@@ -103,7 +103,7 @@ class Client_Animal:
             SELECT * FROM client_animals
         """
         events = CURSOR.execute(sql).fetchall()
-        [print(cls.from_db(row)) for row in events]
+        return [cls.from_db(row) for row in events]
 
     @classmethod
     def find_by_date(cls, date):
@@ -111,9 +111,9 @@ class Client_Animal:
             SELECT * FROM client_animals WHERE event_date = ?
         """
         if events := CURSOR.execute(sql, (date,)).fetchall():
-            [print(cls.from_db(row)) for row in events]
+            return [cls.from_db(row) for row in events]
         else:
-            print(f"No events scheduled on {date}")
+            raise Exception(f"No events scheduled on {date}")
 
     @classmethod
     def find_by_animal_type(cls, type):
@@ -124,8 +124,7 @@ class Client_Animal:
             WHERE animals.species = ?
         """
         events = CURSOR.execute(sql, (type,)).fetchall()
-        [print(cls.from_db(row)) for row in events]
-
+        return [cls.from_db(row) for row in events]
 
     @classmethod
     def find_by_client_type(cls, type):
@@ -141,22 +140,18 @@ class Client_Animal:
     @classmethod
     def find_by_id(cls, event_id):
         sql = """
-            SELECT client_animals.*
+            SELECT *
             FROM client_animals
             WHERE id = ?
         """
         row = CURSOR.execute(sql, (event_id,)).fetchone()
-        event = cls.from_db(row)
-        if event:
-            print(f"{event}")
-        else:
-            print(f"Event {id} not found")
+        return cls.from_db(row) if row else None
 
     @classmethod
     def available_animals(cls, date):
         # display all animals that are not already booked for an event on a certain date
         sql = """
-            SELECT animals.*, client_animals.*
+            SELECT animals.*
             FROM animals
             LEFT JOIN client_animals
             ON animals.id = client_animals.animal_id
@@ -164,9 +159,9 @@ class Client_Animal:
         """
         animals = CURSOR.execute(sql, (date,)).fetchall()
         if animals:
-            [print(f"{row[1]} is available") for row in animals]
+            return [row for row in animals]
         else:
-            print("No animals available")
+            return None
 
 
 # ipdb.set_trace()
