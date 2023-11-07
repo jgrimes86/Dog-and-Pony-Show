@@ -89,7 +89,7 @@ def menu():
     print("4. Find client by name")
     print("5. Display all clients")
     print("6. Find client by type")
-    print("7. Show all aninals that beling to client")
+    print("7. Show all animals that beling to client")
     print("8. Create animal")
     print("9. Find animal by ID")
     print("10. Delete animal")
