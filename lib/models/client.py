@@ -88,7 +88,7 @@ class Client:
     def find_by_id(cls, id):
         sql= "SELECT * FROM clients WHERE id= ?"
         row= CURSOR.execute(sql, (id,)).fetchone()
-        return cls.from_db(row)
+        return cls.from_db(row) if row else None
 
     
     

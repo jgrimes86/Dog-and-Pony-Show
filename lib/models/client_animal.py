@@ -1,5 +1,6 @@
 from models.config import CONN, CURSOR
-# from config import CONN, CURSOR
+from models.animal import Animal
+from models.client import Client
 
 import ipdb
 from datetime import datetime
@@ -15,7 +16,13 @@ class Client_Animal:
     def __repr__(self):
         return f"<Event {self.id}: date = {self.event_date}, client = {self.client_id}, animal = {self.animal_id}>"
 
-    #PROPERTY for validating event_date
+    @classmethod
+    def date_validator(cls, date):
+        if datetime.strptime(date, "%b %d, %Y"):
+            return True
+        else:
+            return False
+
     @property
     def event_date(self):
         return self._event_date
@@ -23,36 +30,32 @@ class Client_Animal:
     @event_date.setter
     def event_date(self, event_date):
         try:
-            if datetime.strptime(event_date, "%b %d, %Y"):
+            if Client_Animal.date_validator(event_date):
                 self._event_date = event_date
         except ValueError:
-            raise ValueError("Date must be in the format of Nov 06, 2023")
+            raise ValueError("Date must match the format of Nov 06, 2023")
 
-    #PROPERTY for validating client_id exists
     @property
     def client_id(self):
         return self._client_id
 
     @client_id.setter
     def client_id(self, client_id):
-        # VALIDATE USING Client.find_by_id function?
-        if type(client_id) is int:
+        if type(client_id) is int and Client.find_by_id(client_id):
             self._client_id = client_id
         else:
-            print(f"Client id {client_id} not found")
+            raise ValueError("Client ID must reference a client in the database")
 
-    #PROPERTY for validating animal_id exists
     @property
     def animal_id(self):
         return self._animal_id
 
     @animal_id.setter
     def animal_id(self, animal_id):
-        # VALIDATE USING Animal.find_by_id function?
-        if type(animal_id) is int:
+        if type(animal_id) is int and Animal.find_by_id(animal_id):
             self._animal_id = animal_id
         else:
-            print(f"Animal id {animal_id} not found")
+            raise ValueError("Animal ID must reference an animal in the database")
 
     @classmethod
     def create_table(cls):
@@ -70,7 +73,7 @@ class Client_Animal:
     @classmethod
     def drop_table(cls):
         sql = """
-            DROP TABLE client_animals
+            DROP TABLE IF EXISTS client_animals
         """
         CURSOR.execute(sql)
         CONN.commit()
@@ -81,6 +84,7 @@ class Client_Animal:
         """
         CURSOR.execute(sql, (self.event_date, self.client_id, self.animal_id))
         CONN.commit()
+        self.id= CURSOR.lastrowid
 
     @classmethod
     def create(cls, event_date, client_id, animal_id):
@@ -88,17 +92,16 @@ class Client_Animal:
         event.save()
         return event
 
-    @classmethod
-    def delete(cls, id):
+    def delete(self):
         sql = """
             DELETE FROM client_animals WHERE id = ?
         """
-        CURSOR.execute(sql, (id,))
+        CURSOR.execute(sql, (self.id,))
         CONN.commit()
-        print(f"Event {id} deleted")
+        self.id = None
 
     @classmethod
-    def event_from_row(self, row):
+    def from_db(self, row):
         return Client_Animal(row[1], row[2], row[3], row[0])
 
     @classmethod
@@ -107,17 +110,21 @@ class Client_Animal:
             SELECT * FROM client_animals
         """
         events = CURSOR.execute(sql).fetchall()
-        [print(cls.event_from_row(row)) for row in events]
+        return [cls.from_db(row) for row in events]
 
     @classmethod
     def find_by_date(cls, date):
-        sql = """
-            SELECT * FROM client_animals WHERE event_date = ?
-        """
-        if events := CURSOR.execute(sql, (date,)).fetchall():
-            [print(cls.event_from_row(row)) for row in events]
-        else:
-            print(f"No events scheduled on {date}")
+        try:
+            if cls.date_validator(date):
+                sql = """
+                    SELECT * FROM client_animals WHERE event_date = ?
+                """
+                if events := CURSOR.execute(sql, (date,)).fetchall():
+                    return [cls.from_db(row) for row in events]
+                else:
+                    raise Exception(f"No events scheduled on {date}")
+        except ValueError:
+            raise ValueError("Date must match the format of Nov 06, 2023")        
 
     @classmethod
     def find_by_animal_type(cls, type):
@@ -128,8 +135,7 @@ class Client_Animal:
             WHERE animals.species = ?
         """
         events = CURSOR.execute(sql, (type,)).fetchall()
-        [print(cls.event_from_row(row)) for row in events]
-
+        return [cls.from_db(row) for row in events]
 
     @classmethod
     def find_by_client_type(cls, type):
@@ -140,39 +146,36 @@ class Client_Animal:
             WHERE clients.type = ?
         """
         events = CURSOR.execute(sql, (type,)).fetchall()
-        [print(cls.event_from_row(row)) for row in events]
+        [print(cls.from_db(row)) for row in events]
 
     @classmethod
-    def event_details(cls, id):
+    def find_by_id(cls, event_id):
         sql = """
-            SELECT client_animals.event_date
+            SELECT *
             FROM client_animals
             WHERE id = ?
         """
-        if event := CURSOR.execute(sql, (id,)).fetchone():
-            # get client info from a Client.find_by_id function
-            client = None
-            # get animal info from an Animal.find_by_id function
-            animal = None
-            print(f"{event[0]}: {animal} performing at {client}'s event.")
-        else:
-            print(f"Event {id} not found")
+        row = CURSOR.execute(sql, (event_id,)).fetchone()
+        return cls.from_db(row) if row else None
 
     @classmethod
     def available_animals(cls, date):
         # display all animals that are not already booked for an event on a certain date
-        sql = """
-            SELECT animals.*, client_animals.*
-            FROM animals
-            LEFT JOIN client_animals
-            ON animals.id = client_animals.animal_id
-            WHERE (event_date != ?) OR (event_date IS NULL)
-        """
-        animals = CURSOR.execute(sql, (date,)).fetchall()
-        if animals:
-            [print(f"{row[1]} is available") for row in animals]
-        else:
-            print("No animals available")
+        try:
+            if cls.date_validator(date):
+                sql = """
+                    SELECT animals.*
+                    FROM animals
+                    LEFT JOIN client_animals
+                    ON animals.id = client_animals.animal_id
+                    WHERE (event_date != ?) OR (event_date IS NULL)
+                """
+                if animals := CURSOR.execute(sql, (date,)).fetchall():
+                    return [row for row in animals]
+                else:
+                    return None
+        except ValueError:
+            raise ValueError("Date must match the format of Nov 06, 2023")
 
 
 # ipdb.set_trace()
