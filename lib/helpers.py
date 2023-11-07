@@ -55,25 +55,51 @@ def client_animals():
  
 
 def create_animal():
-    pass
+    name= input("Enter the animal's name: ")
+    species= input("Enter the animal's species: ")
+    breed= input("Enter the animal's breed: ")
+    skill= input("Enter the animal's skill: ")
+    try:
+        animal= Animal.create(name, species, breed, skill)
+        print(f"Success: {animal}")
+    except Exception as exc:
+        print("Error creating animal: ", exc)
+
 
 def find_animal_by_id():
-    pass
+    id_= input("Enter animal ID: ")
+    animal= Animal.find_by_id(id_)
+    print(animal) if animal else print(f"Animal {id_} not found")
 
 def delete_animal():
-    pass
+    id_= input("Enter animal's ID: ")
+    if animal := Animal.find_by_id(id_):
+        animal.delete()
+        print(f'Animal {id_} deleted')
+    else:
+        print(f'Animal {id_} not found')
+
 
 def display_all_animals():
-    pass
+    animals= Animal.all()
+    for animal in animals:
+        print(animal)
 
 def find_animal_by_species():
-    pass
+    species= input("Enter animal species: ")
+    animal= Animal.find_by_species(species)
+    print(animal) if animal else print(f"There are no animals with the species {species}")
 
 def find_animal_by_name():
-    pass
+    name= input("Enter animal name: ")
+    animal= Animal.find_by_name(name)
+    print(animal) if animal else print(f"Animal {name} not found")
 
 def animal_clients():
-    pass
+    name= input("Enter animal name: ")
+    animal= Animal.find_by_name(name)
+    for client in animal.clients():
+        print(client)
 
 
 def create_event():

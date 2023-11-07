@@ -1,5 +1,4 @@
 from models.config import CONN, CURSOR
-import ipdb
 
 class Animal:
 
@@ -124,23 +123,36 @@ class Animal:
         rows= CURSOR.execute(sql).fetchall()
         return [cls.from_db(row) for row in rows]
     
+    # This returns all of the animal instances with a specific species in a list when 
     @classmethod
     def find_by_species(cls, species):
         sql= "SELECT * FROM animals WHERE species is ?"
         rows= CURSOR.execute(sql, (species,)).fetchall()
         return [cls.from_db(row) for row in rows]
     
+    # This returns the animal with the specified name
     @classmethod
     def find_by_name(cls, name):
         sql= "SELECT * FROM animals WHERE name is ?"
         row= CURSOR.execute(sql, (name,)).fetchone()
         return cls.from_db(row)
     
+    # This returns the animal with the specified id
     @classmethod
     def find_by_id(cls, id):
         sql= "SELECT * FROM animals WHERE id= ?"
         row= CURSOR.execute(sql, (id,)).fetchone()
         return cls.from_db(row) if row else None
 
+    def clients(self):
+        from models.client import Client
+        sql= """
+            SELECT DISTINCT clients.* FROM clients
+            JOIN client_animals ON client_animals.client_id = clients.id
+            WHERE client_animals.animal_id= ?
+        """
+        rows= CURSOR.execute(sql, (self.id,)).fetchall()
+        return [Client.from_db(row) for row in rows]
     
-# ipdb.set_trace()
+
+    
