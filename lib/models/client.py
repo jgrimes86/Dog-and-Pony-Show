@@ -43,11 +43,11 @@ class Client:
 
     @classmethod
     def find_by_name(cls,name):
-        query = "SELECT * FROM clients WHERE name = ?"
+        query = "SELECT * FROM clients WHERE name is ?"
         result = CURSOR.execute(query,(name,)).fetchone()
         if result:
-            client = cls(result)
-            return client
+            
+            return (result)
         else:
             return None
     
