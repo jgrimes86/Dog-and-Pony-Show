@@ -140,7 +140,7 @@ class Animal:
     def find_by_id(cls, id):
         sql= "SELECT * FROM animals WHERE id= ?"
         row= CURSOR.execute(sql, (id,)).fetchone()
-        return cls.from_db(row)
+        return cls.from_db(row) if row else None
 
     
 # ipdb.set_trace()
