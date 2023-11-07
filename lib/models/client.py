@@ -33,6 +33,32 @@ class Client:
     def create(cls, name, type, contact_info):
         client= cls(name, type, contact_info)
         client.save()
-        return client
+        return client 
     
-# ipdb.set_trace()
+    @classmethod
+    def delete(cls, client_id):
+        sql= "DELETE FROM clients WHERE id = ?"
+        CURSOR.execute(sql,(client_id,))
+        CONN.commit()
+
+    @classmethod
+    def find_by_name(cls,name):
+        query = "SELECT * FROM clients WHERE name = ?"
+        result = CURSOR.execute(query,(name,)).fetchone()
+        if result:
+            client = cls(result)
+            return client
+        else:
+            return None
+    
+    @classmethod
+    def display_all_clients(cursor):
+        cursor.execute("SELECT * FROM clients" )
+        rows = cursor.fetchall()
+
+        if len(rows) == 0:
+            print("no clients found")
+        else:
+            print("Clients:")
+            for row in rows:
+                print(row)    
