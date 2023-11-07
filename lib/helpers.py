@@ -9,7 +9,9 @@ def create_client():
     pass
 
 def find_client_by_id():
-    pass
+    id_= input("Enter client ID: ")
+    client= Client.find_by_id(id_)
+    print(client) if client else print(f"Client {id_} not found")
 
 def delete_client():
     pass
