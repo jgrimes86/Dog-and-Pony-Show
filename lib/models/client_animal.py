@@ -1,5 +1,5 @@
-# from models.config import CONN, CURSOR
-from config import CONN, CURSOR
+from models.config import CONN, CURSOR
+# from config import CONN, CURSOR
 
 import ipdb
 from datetime import datetime
