@@ -79,7 +79,6 @@ def display_all_events():
     for event in events:
         print(event)
 
-# MUST CREATE A WAY TO VALIDATE THE DATE FORMAT
 def event_by_date():
     date = input("Enter date: ")
     try:
@@ -103,14 +102,16 @@ def event_by_client_type():
     else:
         print(f"No events found for client type: {type_}")
 
-# MUST CREATE A WAY TO VALIDATE THE DATE FORMAT
 def show_available_animals():
     date = input("Enter date: ")
-    if animals := Client_Animal.available_animals(date):
-        for animal in animals:
-            print(animal)
-    else:
-        print(f"No animals available on {date}")
+    try:
+        if animals := Client_Animal.available_animals(date):
+            for animal in animals:
+                print(animal)
+        else:
+            print(f"No animals available on {date}")
+    except Exception as exc:
+        print("Error: ", exc)
 
 
 def exit_program():

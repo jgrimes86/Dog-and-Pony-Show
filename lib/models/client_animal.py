@@ -16,6 +16,13 @@ class Client_Animal:
     def __repr__(self):
         return f"<Event {self.id}: date = {self.event_date}, client = {self.client_id}, animal = {self.animal_id}>"
 
+    @classmethod
+    def date_validator(cls, date):
+        if datetime.strptime(date, "%b %d, %Y"):
+            return True
+        else:
+            return False
+
     @property
     def event_date(self):
         return self._event_date
@@ -23,7 +30,7 @@ class Client_Animal:
     @event_date.setter
     def event_date(self, event_date):
         try:
-            if datetime.strptime(event_date, "%b %d, %Y"):
+            if Client_Animal.date_validator(event_date):
                 self._event_date = event_date
         except ValueError:
             raise ValueError("Date must match the format of Nov 06, 2023")
@@ -66,7 +73,7 @@ class Client_Animal:
     @classmethod
     def drop_table(cls):
         sql = """
-            DROP TABLE client_animals
+            DROP TABLE IF EXISTS client_animals
         """
         CURSOR.execute(sql)
         CONN.commit()
@@ -107,13 +114,17 @@ class Client_Animal:
 
     @classmethod
     def find_by_date(cls, date):
-        sql = """
-            SELECT * FROM client_animals WHERE event_date = ?
-        """
-        if events := CURSOR.execute(sql, (date,)).fetchall():
-            return [cls.from_db(row) for row in events]
-        else:
-            raise Exception(f"No events scheduled on {date}")
+        try:
+            if cls.date_validator(date):
+                sql = """
+                    SELECT * FROM client_animals WHERE event_date = ?
+                """
+                if events := CURSOR.execute(sql, (date,)).fetchall():
+                    return [cls.from_db(row) for row in events]
+                else:
+                    raise Exception(f"No events scheduled on {date}")
+        except ValueError:
+            raise ValueError("Date must match the format of Nov 06, 2023")        
 
     @classmethod
     def find_by_animal_type(cls, type):
@@ -150,18 +161,21 @@ class Client_Animal:
     @classmethod
     def available_animals(cls, date):
         # display all animals that are not already booked for an event on a certain date
-        sql = """
-            SELECT animals.*
-            FROM animals
-            LEFT JOIN client_animals
-            ON animals.id = client_animals.animal_id
-            WHERE (event_date != ?) OR (event_date IS NULL)
-        """
-        animals = CURSOR.execute(sql, (date,)).fetchall()
-        if animals:
-            return [row for row in animals]
-        else:
-            return None
+        try:
+            if cls.date_validator(date):
+                sql = """
+                    SELECT animals.*
+                    FROM animals
+                    LEFT JOIN client_animals
+                    ON animals.id = client_animals.animal_id
+                    WHERE (event_date != ?) OR (event_date IS NULL)
+                """
+                if animals := CURSOR.execute(sql, (date,)).fetchall():
+                    return [row for row in animals]
+                else:
+                    return None
+        except ValueError:
+            raise ValueError("Date must match the format of Nov 06, 2023")
 
 
 # ipdb.set_trace()
