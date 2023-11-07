@@ -27,12 +27,43 @@ from helpers import (
 )
 
 
-def main():
+def home():
     while True:
-        menu()
+        print()
+        print("THE DOG AND PONY SHOW")
+        print()
+        print("***Home Menu***")
+        home_menu()
         choice = input("> ")
         if choice == "0":
             exit_program()
+        elif choice == "1":
+            client()
+        elif choice == "2":
+            animal()
+        elif choice == "3":
+            event()
+        else:
+            print("Invalid choice")
+
+
+def home_menu():
+    print("Please select an option:")
+    print("1. Go to Client Menu")
+    print("2. Go to Animal Menu")
+    print("3. Go to Event Menu")
+    print("0. Exit the program")
+
+
+def client():
+    while True:
+        print()
+        print("***Client Menu***")
+        client_menu()
+        choice = input("> ")
+        if choice == "0":
+            break
+            home_menu()
         elif choice == "1":
             create_client()
         elif choice == "2":
@@ -47,41 +78,10 @@ def main():
             all_clients_by_type()
         elif choice == "7":
             client_animals()
-        elif choice == "8":
-            create_animal()
-        elif choice == "9":
-            find_animal_by_id()
-        elif choice == "10":
-            delete_animal()
-        elif choice == "11":
-            display_all_animals()
-        elif choice == "12":
-            find_animal_by_species()
-        elif choice == "13":
-            find_animal_by_name()
-        elif choice == "14":
-            animal_clients()
-        elif choice == "15":
-            create_event()
-        elif choice == "16":
-            find_event_by_id()
-        elif choice == "17":
-            delete_event()
-        elif choice == "18":
-            display_all_events()
-        elif choice == "19":
-            event_by_date()
-        elif choice == "20":
-            event_by_animal_type()
-        elif choice == "21":
-            event_by_client_type()
-        elif choice == "22":
-            show_available_animals()
         else:
             print("Invalid choice")
 
-
-def menu():
+def client_menu():
     print("Please select an option:")
     print("1. Create a client")
     print("2. Find client by ID")
@@ -89,24 +89,89 @@ def menu():
     print("4. Find client by name")
     print("5. Display all clients")
     print("6. Find client by type")
-    print("7. Show all animals that beling to client")
-    print("8. Create animal")
-    print("9. Find animal by ID")
-    print("10. Delete animal")
-    print("11. Display all animals")
-    print("12. Show animals by species")
-    print("13. Find animal by name")
-    print("14. Show all clients of an animal")
-    print("15. Create event")
-    print("16. Find event by ID")
-    print("17. Delete event")
-    print("18. Display all events")
-    print("19. Show events on a date")
-    print("20. Show events by animal type")
-    print("21 Show events by client type")
-    print("22. Show animals available on date")
-    print("0. Exit the program")
+    print("7. Show all animals rented by a client")
+    print("0. Return to Home Menu")
+
+
+def animal():
+    while True:
+        print()
+        print("***Animal Menu***")        
+        animal_menu()
+        choice = input("> ")
+        if choice == "0":
+            break
+            home_menu()   
+        elif choice == "1":
+            create_animal()
+        elif choice == "2":
+            find_animal_by_id()
+        elif choice == "3":
+            delete_animal()
+        elif choice == "4":
+            display_all_animals()
+        elif choice == "5":
+            find_animal_by_species()
+        elif choice == "6":
+            find_animal_by_name()
+        elif choice == "7":
+            animal_clients()    
+        else:
+            print("Invalid choice")
+
+def animal_menu():
+    print("Please select an option:")
+    print("1. Create animal")
+    print("2. Find animal by ID")
+    print("3. Delete animal")
+    print("4. Display all animals")
+    print("5. Show animals by species")
+    print("6. Find animal by name")
+    print("7. Show all clients of an animal")
+    print("0. Return to Home Menu")
+
+
+def event():
+    while True:
+        print()
+        print("***Event Menu***")
+        event_menu()
+        choice = input("> ")
+        if choice == "0":
+            break
+            home_menu()    
+        elif choice == "1":
+            create_event()
+        elif choice == "2":
+            find_event_by_id()
+        elif choice == "3":
+            delete_event()
+        elif choice == "4":
+            display_all_events()
+        elif choice == "5":
+            event_by_date()
+        elif choice == "6":
+            event_by_animal_type()
+        elif choice == "7":
+            event_by_client_type()
+        elif choice == "8":
+            show_available_animals()        
+        else:
+            print("Invalid choice")
+
+def event_menu():
+    print("Please select an option:")
+    print("1. Create event")
+    print("2. Find event by ID")
+    print("3. Delete event")
+    print("4. Display all events")
+    print("5. Show events on a date")
+    print("6. Show events by animal type")
+    print("7. Show events by client type")
+    print("8. Show animals available on date")
+    print("0. Return to Home Menu")
+
 
 
 if __name__ == "__main__":
-    main()
+    home()
