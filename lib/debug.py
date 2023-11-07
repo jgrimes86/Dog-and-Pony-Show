@@ -4,16 +4,24 @@
 from models.config import CONN, CURSOR
 from models.animal import Animal
 from models.client import Client
+from models.client_animal import Client_Animal
 import ipdb
 # from models.client import Client 
 
-# Animal.drop_table()
+Animal.drop_table()
 Animal.create_table()
-# Client.drop_table()
+Client.drop_table()
 Client.create_table()
+Client_Animal.drop_table()
+Client_Animal.create_table()
+
 
 animal1= Animal.create('Fido', 'Dog', 'Golden Retriever', 'Jumping')
 animal2= Animal.create('Rover', 'Dog', 'Dalmation', 'Sleeping')
-animal3= Animal.create('Lucky', 'Pony', 'Shetland', 'Trotting')
+animal3= Animal.create('Lucky', 'Pony', 'Shetland', 'Trotting') 
+
+Client.create('Dewey Chetum & Howe', 'Business', '555-555-5555')
+
+Client_Animal.create("Nov 14, 2023", 1, 1)
 
 ipdb.set_trace()
