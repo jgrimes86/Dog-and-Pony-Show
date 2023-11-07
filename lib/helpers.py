@@ -51,7 +51,14 @@ def all_clients_by_type(client_type):
     
 
 def client_animals():
-    pass
+    id_= input("Enter client ID: ")
+    client= Client.find_by_id(id_)
+    if client:
+        for animal in client.animals():
+            print(animal)
+    else:
+        print("Client doesn't exist")
+
  
 
 def create_animal():
@@ -96,10 +103,13 @@ def find_animal_by_name():
     print(animal) if animal else print(f"Animal {name} not found")
 
 def animal_clients():
-    name= input("Enter animal name: ")
-    animal= Animal.find_by_name(name)
-    for client in animal.clients():
-        print(client)
+    id_= input("Enter animal id: ")
+    animal= Animal.find_by_id(id_)
+    if animal:
+        for client in animal.clients():
+            print(client)
+    else:
+        print("Animal doesn't exist")
 
 
 def create_event():

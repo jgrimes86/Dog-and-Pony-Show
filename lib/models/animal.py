@@ -63,7 +63,7 @@ class Animal:
 
 
     def __repr__(self):
-        return f"<Animal {self.id}: {self.name}, the {self.species}>"
+        return f"Animal {self.id}: {self.name}, the {self.species}"
     
 
     @classmethod

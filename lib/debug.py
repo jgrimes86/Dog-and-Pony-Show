@@ -13,7 +13,7 @@ Animal.drop_table()
 Animal.create_table()
 Client.drop_table()
 Client.create_table()
-# Client_Animal.drop_table()
+Client_Animal.drop_table()
 Client_Animal.create_table()
 
 
@@ -26,5 +26,6 @@ client2= Client.create('LeBron James', 'Personal', '216-465-2306')
 
 event1= Client_Animal.create("Nov 14, 2023", 1, 1)
 event2= Client_Animal.create("Jun 03, 2024", 2, 1)
+event3= Client_Animal.create("Dec 25, 2024", 2, 3)
 
 ipdb.set_trace()

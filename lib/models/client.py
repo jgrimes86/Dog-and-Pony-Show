@@ -3,14 +3,14 @@ import ipdb
 
 class Client:
 
-    def __init__(self, name, type, contact_info,id=None):
+    def __init__(self, name, type, contact_info, id=None):
         self.name= name
         self.type= type
         self.contact_info= contact_info
         self.id = id 
 
     def __repr__(self):
-        return f"Client(name={self.name},type={self.type},contact_info={self.contact_info})" 
+        return f"Client {self.id}: Name: {self.name}, Reason: {self.type})" 
     
     @classmethod
     def from_db(cls, row):
@@ -89,7 +89,16 @@ class Client:
         sql= "SELECT * FROM clients WHERE id= ?"
         row= CURSOR.execute(sql, (id,)).fetchone()
         return cls.from_db(row) if row else None
-
+    
+    def animals(self):
+        from models.animal import Animal 
+        sql= """
+        SELECT DISTINCT animals.* FROM animals
+        JOIN client_animals ON client_animals.animal_id= animals.id
+        WHERE client_animals.client_id= ?
+        """
+        rows= CURSOR.execute(sql, (self.id,)).fetchall()
+        return [Animal.from_db(row) for row in rows]
     
     
 
