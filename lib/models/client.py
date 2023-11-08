@@ -28,7 +28,7 @@ class Client:
             if type in ["Corporate Seminar", "Team-Building Event", "Birthday Party"]:
                 self._type= type
             else:
-                raise ValueError("Type of event has 3 options: Corporate Seminar, Team-Building Event, and Birthday Party")
+                raise ValueError("Event type has 3 options: Corporate Seminar, Team-Building Event, and Birthday Party")
         else:
             raise TypeError("Event type needs to be a string")
         

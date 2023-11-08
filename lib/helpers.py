@@ -10,11 +10,11 @@ from InquirerPy.separator import Separator
 
 def create_client():
     name= input("Enter the client's name: ")
-    type= input("Enter the client's event type: ")
+    type= input("Enter the client's event type (Corporate Seminar, Team-Building Event, or Birthday Party): ")
     phone_number= input("Enter the client's phone number: ")
     try:
         client= Client.create(name, type, phone_number)
-        print(f"Success: {client}")
+        print(f"Success: {client} has been created")
     except Exception as exc:
         print("Error creating client: ", exc)
     
@@ -23,12 +23,9 @@ def find_client_by_id():
     id_= input("Enter client ID: ")
     client= Client.find_by_id(id_)
     if client: 
-        print(f"Client {client.id}: {client.name}, event type: {client.type}, phone number: {client.phone_number}")
-    
-    
-    
+        print(f"Client {client.id}: {client.name}  Event Type: {client.type}  Phone Number: {client.phone_number}")
     else: 
-        print(f"Client {id_} not found")
+        print(f"There is no client with an ID of {id_}")
 
 
 def delete_client():
@@ -37,13 +34,13 @@ def delete_client():
         client.delete()
         print(f'Client {id_} deleted')
     else:
-        print(f'Client {id_} not found')
+        print(f'There is no client with an ID of {id_}')
    
 
 def client_by_name():
     name = input("Enter client name: ")
     client = Client.find_by_name(name)
-    print(client) if client else print(f"Client {name} not found")
+    print(client) if client else print(f"There is no client with the name of {name}")
 
 
 def display_all_clients():
@@ -61,9 +58,8 @@ def all_clients_by_type():
             "Birthday Party",
             Choice(value=None, name="Go Back"),
         ],
-        default = "name"
+        default = "Corporate Seminar"
     ).execute()
-# type= input('Enter client event type: ')
     clients= Client.view_by_type(choice)
     if clients:
         for client in clients:
@@ -76,20 +72,24 @@ def client_animals():
     id_= input("Enter client ID: ")
     client= Client.find_by_id(id_)
     if client:
-        for animal in client.animals():
-            print(animal)
+        animals= client.animals()
+        if animals:
+            for animal in animals:
+                print(animal)
+        else:
+            print(f"This client hasn't reserved any animals yet.")
     else:
-        print("Client doesn't exist")
+        print(f"There is no animal with an ID of {id_}")
 
 
 def create_animal():
     name= input("Enter the animal's name: ")
-    species= input("Enter the animal's species: ")
+    species= input("Enter the animal's species (Dog or Pony): ")
     breed= input("Enter the animal's breed: ")
     skill= input("Enter the animal's skill: ")
     try:
         animal= Animal.create(name, species, breed, skill)
-        print(f"Success: {animal}")
+        print(f"Success: {animal} has been created")
     except Exception as exc:
         print("Error creating animal: ", exc)
 
@@ -100,7 +100,7 @@ def find_animal_by_id():
     id_ = inquirer.text(message="Enter event ID: ").execute()
     if id_ != "exit":
         animal= Animal.find_by_id(id_)
-        print(animal) if animal else print(f"Animal {id_} not found")
+        print(f"Name: {animal.name}  Species: {animal.species}  Breed: {animal.breed}  Skill: {animal.skill}") if animal else print(f"There is no animal with an ID of {id_}")
 
 def delete_animal():
     print("Type 'exit' to return to Event Menu")
@@ -111,7 +111,7 @@ def delete_animal():
             animal.delete()
             print(f'Animal {id_} deleted')
         else:
-            print(f'Animal {id_} not found')
+            print(f'There is no animal with an ID of {id_}')
 
 def display_all_animals():
     animals= Animal.all()
@@ -120,13 +120,21 @@ def display_all_animals():
 
 ################ GOOD OPORTUNITY FOR SELECT MENU:
 def find_animal_by_species():
-    species= input("Enter animal species: ")
+    species= inquirer.select(
+        message= "Select animal type",
+        choices= [
+            "Dog",
+            "Pony",
+            Choice(value=None, name="Go Back")
+        ],
+        default = "Dog"
+    ).execute()
     animals= Animal.find_by_species(species)
     if animals:
         for animal in animals:
             print(animal)
     else:
-        print("None of our animals belong to that species")
+        print('No aminals have that species')
 
 def find_animal_by_name():
     print("Type 'exit' to return to Event Menu")
@@ -137,7 +145,7 @@ def find_animal_by_name():
             if animal := Animal.find_by_name(name):
                 print(animal)
         except:
-            print(f"Animal {name} not found")
+            print(f"There is no animal with the name of {name}")
 
 def animal_clients():
     print("Type 'exit' to return to Event Menu")
@@ -146,10 +154,14 @@ def animal_clients():
     # id_= input("Enter animal id: ")
         animal= Animal.find_by_id(id_)
         if animal:
-            for client in animal.clients():
-                print(client)
+            clients = animal.clients()
+            if clients:
+                for client in clients:
+                    print(client)
+            else:
+                print("This animal doesn't currently have any clients")
         else:
-            print("Animal doesn't exist")
+            print(f"There is no animal with an ID of {id_}")
 
 
 def create_event():
