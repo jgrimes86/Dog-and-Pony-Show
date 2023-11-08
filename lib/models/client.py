@@ -6,9 +6,49 @@ class Client:
         self.name= name
         self.type= type
         self.phone_number= phone_number
+    
+    @property
+    def name(self):
+        return self._name 
+    
+    @name.setter
+    def name(self, name):
+        if type(name) == str:
+            self._name = name
+        else:
+            raise TypeError("Name must be a string")
+        
+    @property
+    def type(self):
+        return self._type
+    
+    @type.setter
+    def type(self, type):
+        if isinstance(type, str):
+            if type in ["Corporate Seminar", "Team-Building Event", "Birthday Party"]:
+                self._type= type
+            else:
+                raise ValueError("Type of event has 3 options: Corporate Seminar, Team-Building Event, and Birthday Party")
+        else:
+            raise TypeError("Event type needs to be a string")
+        
+    @property
+    def phone_number(self):
+        return self._phone_number
+    
+    @phone_number.setter
+    def phone_number(self, phone_number):
+        if type(phone_number) == str:
+            if len(phone_number) == 12:
+                self._phone_number= phone_number
+            else:
+                raise ValueError("Required phone number format: xxx-xxx-xxxx")
+        else:
+            raise TypeError("Phone number must be a string")
+                        
 
     def __repr__(self):
-        return f"Client {self.id}: Name: {self.name}, Reason: {self.type})" 
+        return f"Client {self.id}: Name: {self.name}, Type of Event: {self.type})" 
 
     @classmethod
     def create_table(cls):

@@ -3,11 +3,9 @@ from models.animal import Animal
 from models.client import Client
 from models.client_animal import Client_Animal
 
-import sqlite3
-
 def create_client():
     name= input("Enter the client's name: ")
-    type= input("Enter the client's type: ")
+    type= input("Enter the client's event type: ")
     phone_number= input("Enter the client's phone number: ")
     try:
         client= Client.create(name, type, phone_number)
@@ -44,13 +42,13 @@ def display_all_clients():
 
 
 def all_clients_by_type():
-    type= input('Enter client type: ')
+    type= input('Enter client event type: ')
     clients= Client.view_by_type(type)
     if clients:
         for client in clients:
             print(client)
     else:
-        print("No clients have that type")
+        print("No clients have that event type")
     
 
 def client_animals():
@@ -162,11 +160,11 @@ def event_by_animal_type():
         print(f"No events found for animal species: {type_}")
 
 def event_by_client_type():
-    type_ = input("Enter client type: ")
+    type_ = input("Enter client event type: ")
     if events := Client_Animal.find_by_client_type(type_):
         print([event for event in events])
     else:
-        print(f"No events found for client type: {type_}")
+        print(f"No events found for client event type: {type_}")
 
 def show_available_animals():
     date = input("Enter date: ")

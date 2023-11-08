@@ -85,10 +85,10 @@ def client_menu():
     print("Please select an option:")
     print("1. Create a client")
     print("2. Find client by ID")
-    print("3 Delete client")
+    print("3. Delete client")
     print("4. Find client by name")
     print("5. Display all clients")
-    print("6. Find client by type")
+    print("6. Find client by event type")
     print("7. Show all animals rented by a client")
     print("0. Return to Home Menu")
 
@@ -167,7 +167,7 @@ def event_menu():
     print("4. Display all events")
     print("5. Show events on a date")
     print("6. Show events by animal type")
-    print("7. Show events by client type")
+    print("7. Show events by client event type")
     print("8. Show animals available on date")
     print("0. Return to Home Menu")
 
