@@ -8,9 +8,6 @@ from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 
-def create_client(name,client_type,contact_info):
-    new_client = Client.create(name, client_type, contact_info)
-    return new_client
 def create_client():
     name= input("Enter the client's name: ")
     type= input("Enter the client's event type: ")
