@@ -16,7 +16,7 @@ from helpers import (
     find_animal_by_name,
     animal_clients,
     create_event,
-    find_event_by_id,
+    event_details_by_id,
     delete_event,
     display_all_events,
     event_by_date,
@@ -31,8 +31,8 @@ def home():
     while True:
         print()
         print("THE DOG AND PONY SHOW")
-        print()
         print("***Home Menu***")
+        print()
         home_menu()
         choice = input("> ")
         if choice == "0":
@@ -59,6 +59,7 @@ def client():
     while True:
         print()
         print("***Client Menu***")
+        print()
         client_menu()
         choice = input("> ")
         if choice == "0":
@@ -96,7 +97,8 @@ def client_menu():
 def animal():
     while True:
         print()
-        print("***Animal Menu***")        
+        print("***Animal Menu***")    
+        print()    
         animal_menu()
         choice = input("> ")
         if choice == "0":
@@ -135,6 +137,7 @@ def event():
     while True:
         print()
         print("***Event Menu***")
+        print()
         event_menu()
         choice = input("> ")
         if choice == "0":
@@ -143,7 +146,7 @@ def event():
         elif choice == "1":
             create_event()
         elif choice == "2":
-            find_event_by_id()
+            event_details_by_id()
         elif choice == "3":
             delete_event()
         elif choice == "4":
@@ -162,7 +165,7 @@ def event():
 def event_menu():
     print("Please select an option:")
     print("1. Create event")
-    print("2. Find event by ID")
+    print("2. Show event details by event ID")
     print("3. Delete event")
     print("4. Display all events")
     print("5. Show events on a date")
