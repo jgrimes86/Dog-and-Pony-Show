@@ -102,24 +102,31 @@ def client_animals():
             print(f"There is no animal with an ID of {id_}")
 
 
-######### PROVIDE OPPORTUNITY TO EXIT INPUT
 def create_animal():
-    name= input("Enter the animal's name: ")
-    species= inquirer.select(
-        message= "Select animal's species",
-        choices= [
-            "Dog",
-            "Pony"
-        ],
-        default= 'Dog'
-    ).execute()
-    breed= input("Enter the animal's breed: ")
-    skill= input("Enter the animal's skill: ")
-    try:
-        animal= Animal.create(name, species, breed, skill)
-        print(f"Success: {animal} has been created")
-    except Exception as exc:
-        print("Error creating animal: ", exc)
+    print("Type 'exit' to return to Event Menu")
+    name = inquirer.text(message="Enter the animal's name: ").execute()
+    if name != "exit":
+        species= inquirer.select(
+            message= "Select animal's species",
+            choices= [
+                "Dog",
+                "Pony",
+                Choice(value=None, name="Return to Animal Menu")
+            ],
+            default= 'Dog'
+        ).execute()
+        if species != None:
+            print("Type 'exit' to return to Event Menu")
+            breed = inquirer.text(message="Enter the animal's breed: ").execute()
+            if breed != "exit":
+                print("Type 'exit' to return to Event Menu")
+                skill = inquirer.text(message="Enter the animal's skill: ").execute()
+                if skill != "exit":
+                    try:
+                        animal= Animal.create(name, species, breed, skill)
+                        print(f"Success: {animal} has been created")
+                    except Exception as exc:
+                        print("Error creating animal: ", exc)
 
 
 def find_animal_by_id():
@@ -150,7 +157,7 @@ def find_animal_by_species():
         choices= [
             "Dog",
             "Pony",
-            Choice(value=None, name="Go Back")
+            Choice(value=None, name="Return to Animal Menu")
         ],
         default = "Dog"
     ).execute()
