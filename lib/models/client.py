@@ -1,22 +1,54 @@
 from models.config import CONN, CURSOR
-import ipdb
 
 class Client:
 
-    def __init__(self, name, type, contact_info, id=None):
+    def __init__(self, name, type, phone_number, id= None):
         self.name= name
         self.type= type
-        self.contact_info= contact_info
-        self.id = id 
+        self.phone_number= phone_number
+    
+    @property
+    def name(self):
+        return self._name 
+    
+    @name.setter
+    def name(self, name):
+        if type(name) == str:
+            self._name = name
+        else:
+            raise TypeError("Name must be a string")
+        
+    @property
+    def type(self):
+        return self._type
+    
+    @type.setter
+    def type(self, type):
+        if isinstance(type, str):
+            if type in ["Corporate Seminar", "Team-Building Event", "Birthday Party"]:
+                self._type= type
+            else:
+                raise ValueError("Type of event has 3 options: Corporate Seminar, Team-Building Event, and Birthday Party")
+        else:
+            raise TypeError("Event type needs to be a string")
+        
+    @property
+    def phone_number(self):
+        return self._phone_number
+    
+    @phone_number.setter
+    def phone_number(self, phone_number):
+        if type(phone_number) == str:
+            if len(phone_number) == 12:
+                self._phone_number= phone_number
+            else:
+                raise ValueError("Required phone number format: xxx-xxx-xxxx")
+        else:
+            raise TypeError("Phone number must be a string")
+                        
 
     def __repr__(self):
-        return f"Client {self.id}: Name: {self.name}, Reason: {self.type})" 
-    
-    @classmethod
-    def from_db(cls, row):
-        client_instance= Client(row[1], row[2], row[3])
-        client_instance.id= row[0]
-        return client_instance
+        return f"Client {self.id}: Name: {self.name}, Type of Event: {self.type})" 
 
     @classmethod
     def create_table(cls):
@@ -25,64 +57,63 @@ class Client:
             id INTEGER PRIMARY KEY, 
             name TEXT,
             type TEXT,
-            contact_info TEXT
+            phone_number TEXT
         )
         """
         CURSOR.execute(sql)
         CONN.commit()
 
+    @classmethod
+    def drop_table(cls):
+        sql= "DROP TABLE clients;"
+        CURSOR.execute(sql)
+        CONN.commit() 
+
     def save(self):
         sql= """
-        INSERT INTO clients (name, type, contact_info) VALUES (?, ?, ?)
+        INSERT INTO clients (name, type, phone_number) VALUES (?, ?, ?)
         """
-        CURSOR.execute(sql, (self.name, self.type, self.contact_info))
+        CURSOR.execute(sql, (self.name, self.type, self.phone_number))
         CONN.commit()
         self.id= CURSOR.lastrowid
 
     @classmethod
-    def create(cls, name, type, contact_info):
-        client= cls(name, type, contact_info)
+    def create(cls, name, type, phone_number):
+        client= cls(name, type, phone_number)
         client.save()
         return client 
     
-    @classmethod
-    def delete(cls, client_id):
+    def delete(self):
         sql= "DELETE FROM clients WHERE id = ?"
-        CURSOR.execute(sql,(client_id,))
+        CURSOR.execute(sql, (self.id,))
         CONN.commit()
+        self.id= None
+
+    @classmethod
+    def from_db(cls, row):
+        client_instance= Client(row[1], row[2], row[3])
+        client_instance.id= row[0]
+        return client_instance
 
     @classmethod
     def find_by_name(cls,name):
         query = "SELECT * FROM clients WHERE name is ?"
         result = CURSOR.execute(query,(name,)).fetchone()
         if result:
-            
-            return (result)
+            return cls.from_db(result)
         else:
             return None
     
     @classmethod
     def display_all_clients(cls):
         rows = CURSOR.execute("SELECT * FROM clients" ).fetchall()
-        
-
-        if len(rows) == 0:
-            print("no clients found")
-        else:
-            print("Clients:")
-            for row in rows:
-                print(row)    
+        return [cls.from_db(row) for row in rows]  
 
     @classmethod
-    def view_by_type(cls,type):  
+    def view_by_type(cls, type):  
         rows = CURSOR.execute("SELECT * FROM clients WHERE type is ?", (type,)).fetchall()
         return [cls.from_db(row) for row in rows] 
     
-    @classmethod
-    def drop_table(cls):
-        sql= "DROP TABLE clients;"
-        CURSOR.execute(sql)
-        CONN.commit() 
 
     @classmethod
     def find_by_id(cls, id):
