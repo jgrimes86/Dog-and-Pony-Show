@@ -4,7 +4,7 @@ from models.client import Client
 from models.client_animal import Client_Animal
 
 # import sqlite3
-from InquirerPy import inquirer
+from InquirerPy import inquirer, prompt, get_style
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 
@@ -121,31 +121,39 @@ def animal_clients():
 
 
 def create_event():
-    event_date = input("Enter event date: ")
-    client_id = input("Enter client ID: ")
-    animal_id = input("Enter animal ID: ")
-    try:
-        new_event = Client_Animal.create(event_date, int(client_id), int(animal_id))
-        print(f"Event created: {new_event}")
-    except Exception as exc:
-        print("Error creating event: ", exc)
+    print("Type 'exit' to return to Event Menu")
+    event_date = inquirer.text(message="Enter event date: ").execute()
+    if event_date != "exit":
+        client_id = inquirer.text(message="Enter client ID: ").execute()
+        if client_id != "exit":
+            animal_id = inquirer.text(message="Enter animal ID: ").execute()
+            if animal_id != "exit":
+                try:
+                    new_event = Client_Animal.create(event_date, int(client_id), int(animal_id))
+                    print(f"Event created: {new_event}")
+                except Exception as exc:
+                    print("Error creating event: ", exc)
 
-def find_event_by_id():
-    id_ = input("Enter event ID: ")
-    row = Client_Animal.find_by_id(id_)
-    if row:
-        pass
-        print(f"Event {row[0]}: {row[1]}, {row[2]} performs at a {row[4]} for {row[3]}")
-    else:
-        print(f"Event {id_} not found")
+def event_details_by_id():
+    print("Type 'exit' to return to Event Menu")
+    id_ = inquirer.text(message="Enter event ID: ").execute()
+    if id_ != "exit":
+        row = Client_Animal.show_event_details(id_)
+        if row:
+            pass
+            print(f"Event {row[0]}: {row[1]}, {row[2]} performs at a {row[4]} for {row[3]}")
+        else:
+            print(f"Event {id_} not found")
 
 def delete_event():
-    id_ = input("Enter event ID: ")
-    if event := Client_Animal.find_by_id(id_):
-        event.delete()
-        print(f"Event {id_} deleted")
-    else:
-        print(f"Event {id_} not found")
+    print("Type 'exit' to return to Event Menu")
+    id_ = inquirer.text(message="Enter event ID: ").execute()
+    if id_ != "exit":
+        if event := Client_Animal.find_by_id(id_):
+            event.delete()
+            print(f"Event {id_} deleted")
+        else:
+            print(f"Event {id_} not found")
 
 def display_all_events():
     events = Client_Animal.view_all()
@@ -153,13 +161,17 @@ def display_all_events():
         print(event)
 
 def event_by_date():
-    date = input("Enter date: ")
-    try:
-        events = Client_Animal.find_by_date(date)
-        for event in events:
-            print(event)
-    except Exception as exc:
-        print("Error: ", exc)
+    print("Type 'exit' to return to Event Menu")
+    date = inquirer.text(message="Enter date: ").execute()
+    if date != "exit":
+        try:
+            events = Client_Animal.find_by_date(date)
+            for event in events:
+                print(event)
+        except Exception as exc:
+            print("Error: ", exc)
+
+# style = get_style({'questionmark': "#e5c07b"})
 
 def event_by_animal_type():
     species = inquirer.select(
@@ -169,13 +181,15 @@ def event_by_animal_type():
             "Pony",
             Choice(value=None, name="Return to Event Menu"),
         ],
-        default = "Dog"
+        default = "Dog",
+        # style = style
     ).execute()
-    if events := Client_Animal.find_by_animal_type(species):
-        for event in events:
-            print(event)
-    else:
-        print(f"No events found for animal species: {species}")
+    if species != None:
+        if events := Client_Animal.find_by_animal_type(species):
+            for event in events:
+                print(event)
+        else:
+            print(f"No events found for animal species: {species}")
 
 def event_by_client_type():
     event_type = inquirer.select(
@@ -188,22 +202,25 @@ def event_by_client_type():
         ],
         default = "Corporate Seminar"
     ).execute()
-    if events := Client_Animal.find_by_client_type(event_type):
-        for event in events:
-            print(event)
-    else:
-        print(f"No events found for client event type: {event_type}")
+    if event_type != None:
+        if events := Client_Animal.find_by_client_type(event_type):
+            for event in events:
+                print(event)
+        else:
+            print(f"No events found for client event type: {event_type}")
 
 def show_available_animals():
-    date = input("Enter date: ")
-    try:
-        if animals := Client_Animal.available_animals(date):
-            for animal in animals:
-                print(animal)
-        else:
-            print(f"No animals available on {date}")
-    except Exception as exc:
-        print("Error: ", exc)
+    print("Type 'exit' to return to Event Menu")
+    date = inquirer.text(message="Enter date: ").execute()
+    if date != "exit":
+        try:
+            if rows := Client_Animal.available_animals(date):
+                for row in rows:
+                    print(f"Animal {row[0]}: {row[1]}, a {row[2]} who is good at {row[4]}")
+            else:
+                print(f"No animals available on {date}")
+        except Exception as exc:
+            print("Error: ", exc)
 
 
 def exit_program():

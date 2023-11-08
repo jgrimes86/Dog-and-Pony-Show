@@ -88,9 +88,17 @@ class Client_Animal:
 
     @classmethod
     def create(cls, event_date, client_id, animal_id):
-        event = cls(event_date, client_id, animal_id)
-        event.save()
-        return event
+        try:
+            available_animals = cls.available_animals(event_date)
+            ids = [int(animal[0]) for animal in available_animals]
+            if animal_id in ids:
+                event = cls(event_date, client_id, animal_id)
+                event.save()
+                return event
+            else:
+                raise Exception(f"Animal {animal_id} not available on {event_date}")
+        except Exception as exc:
+            return exc
 
     def delete(self):
         sql = """
@@ -150,6 +158,16 @@ class Client_Animal:
 
     @classmethod
     def find_by_id(cls, event_id):
+        sql = """
+            SELECT *
+            FROM client_animals
+            WHERE id = ?
+        """
+        row = CURSOR.execute(sql, (event_id,)).fetchone()
+        return cls.from_db(row) if row else None
+
+    @classmethod
+    def show_event_details(cls, event_id):
         sql = """
             SELECT client_animals.id, client_animals.event_date, animals.name, clients.name, clients.type
             FROM client_animals
