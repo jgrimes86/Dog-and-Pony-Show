@@ -3,11 +3,11 @@ from models.animal import Animal
 from models.client import Client
 from models.client_animal import Client_Animal
 
-# import sqlite3
 from InquirerPy import inquirer, prompt, get_style
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 
+####### PROVIDE OPPORTUNITY TO EXIT INPUT
 def create_client():
     name= input("Enter the client's name: ")
     type= input("Enter the client's event type (Corporate Seminar, Team-Building Event, or Birthday Party): ")
@@ -20,27 +20,35 @@ def create_client():
     
 
 def find_client_by_id():
-    id_= input("Enter client ID: ")
-    client= Client.find_by_id(id_)
-    if client: 
-        print(f"Client {client.id}: {client.name}  Event Type: {client.type}  Phone Number: {client.phone_number}")
-    else: 
-        print(f"There is no client with an ID of {id_}")
+    print("Type 'exit' to return to Event Menu")
+    id_ = inquirer.text(message="Enter client ID: ").execute()
+    if id_ != "exit":
+        client= Client.find_by_id(id_)
+        if client: 
+            print(f"Client {client.id}: {client.name}. Event Type: {client.type}; Phone Number: {client.phone_number}")
+        else: 
+            print(f"There is no client with an ID of {id_}")
 
 
 def delete_client():
-    id_= input("Enter client's ID: ")
-    if client := Client.find_by_id(id_):
-        client.delete()
-        print(f'Client {id_} deleted')
-    else:
-        print(f'There is no client with an ID of {id_}')
+    print("Type 'exit' to return to Event Menu")
+    id_ = inquirer.text(message="Enter event ID: ").execute()
+    if id_ != "exit":
+        if client := Client.find_by_id(id_):
+            client.delete()
+            print(f'Client {id_} deleted')
+        else:
+            print(f'There is no client with an ID of {id_}')
    
-
 def client_by_name():
-    name = input("Enter client name: ")
-    client = Client.find_by_name(name)
-    print(client) if client else print(f"There is no client with the name of {name}")
+    print("Type 'exit' to return to Event Menu")
+    name = inquirer.text(message="Enter client name: ").execute()
+    if name != "exit":
+        client = Client.find_by_name(name)
+        if client:
+            print(f"Client {client.id}: {client.name}. Event Type: {client.type}; Phone Number: {client.phone_number}")
+        else:
+            print(f"There is no client with the name of {name}")
 
 
 def display_all_clients():
@@ -56,32 +64,35 @@ def all_clients_by_type():
             "Corporate Seminar",
             "Team-Building Event",
             "Birthday Party",
-            Choice(value=None, name="Go Back"),
+            Choice(value=None, name="Return to Client Menu"),
         ],
         default = "Corporate Seminar"
     ).execute()
-    clients= Client.view_by_type(choice)
-    if clients:
-        for client in clients:
-            print(client)
-    else:
-        print("No clients have that event type")
+    if choice != None:
+        clients= Client.view_by_type(choice)
+        if clients:
+            for client in clients:
+                print(client)
+        else:
+            print("No clients have that event type")
     
 
 def client_animals():
-    id_= input("Enter client ID: ")
-    client= Client.find_by_id(id_)
-    if client:
-        animals= client.animals()
-        if animals:
-            for animal in animals:
-                print(animal)
+    print("Type 'exit' to return to Event Menu")
+    id_ = inquirer.text(message="Enter event ID: ").execute()
+    if id_ != "exit":
+        client= Client.find_by_id(id_)
+        if client:
+            animals= client.animals()
+            if animals:
+                for animal in animals:
+                    print(animal)
+            else:
+                print(f"This client hasn't reserved any animals yet.")
         else:
-            print(f"This client hasn't reserved any animals yet.")
-    else:
-        print(f"There is no animal with an ID of {id_}")
+            print(f"There is no animal with an ID of {id_}")
 
-
+######### PROVIDE OPPORTUNITY TO EXIT INPUT
 def create_animal():
     name= input("Enter the animal's name: ")
     species= input("Enter the animal's species (Dog or Pony): ")
@@ -95,7 +106,6 @@ def create_animal():
 
 
 def find_animal_by_id():
-    # id_= input("Enter animal ID: ")
     print("Type 'exit' to return to Event Menu")
     id_ = inquirer.text(message="Enter event ID: ").execute()
     if id_ != "exit":
@@ -106,7 +116,6 @@ def delete_animal():
     print("Type 'exit' to return to Event Menu")
     id_ = inquirer.text(message="Enter event ID: ").execute()
     if id_ != "exit":
-    # id_= input("Enter animal's ID: ")
         if animal := Animal.find_by_id(id_):
             animal.delete()
             print(f'Animal {id_} deleted')
@@ -118,7 +127,6 @@ def display_all_animals():
     for animal in animals:
         print(animal)
 
-################ GOOD OPORTUNITY FOR SELECT MENU:
 def find_animal_by_species():
     species= inquirer.select(
         message= "Select animal type",
@@ -129,18 +137,18 @@ def find_animal_by_species():
         ],
         default = "Dog"
     ).execute()
-    animals= Animal.find_by_species(species)
-    if animals:
-        for animal in animals:
-            print(animal)
-    else:
-        print('No aminals have that species')
+    if species != None:
+        animals= Animal.find_by_species(species)
+        if animals:
+            for animal in animals:
+                print(animal)
+        else:
+            print('No aminals have that species')
 
 def find_animal_by_name():
     print("Type 'exit' to return to Event Menu")
     name = inquirer.text(message="Enter animal name: ").execute()
     if name != "exit":
-    # name= input("Enter animal name: ")
         try:
             if animal := Animal.find_by_name(name):
                 print(animal)
@@ -151,7 +159,6 @@ def animal_clients():
     print("Type 'exit' to return to Event Menu")
     id_ = inquirer.text(message="Enter animal ID: ").execute()
     if id_ != "exit":
-    # id_= input("Enter animal id: ")
         animal= Animal.find_by_id(id_)
         if animal:
             clients = animal.clients()
