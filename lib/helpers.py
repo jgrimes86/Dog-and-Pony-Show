@@ -95,23 +95,30 @@ def create_animal():
 
 
 def find_animal_by_id():
-    id_= input("Enter animal ID: ")
-    animal= Animal.find_by_id(id_)
-    print(animal) if animal else print(f"Animal {id_} not found")
+    # id_= input("Enter animal ID: ")
+    print("Type 'exit' to return to Event Menu")
+    id_ = inquirer.text(message="Enter event ID: ").execute()
+    if id_ != "exit":
+        animal= Animal.find_by_id(id_)
+        print(animal) if animal else print(f"Animal {id_} not found")
 
 def delete_animal():
-    id_= input("Enter animal's ID: ")
-    if animal := Animal.find_by_id(id_):
-        animal.delete()
-        print(f'Animal {id_} deleted')
-    else:
-        print(f'Animal {id_} not found')
+    print("Type 'exit' to return to Event Menu")
+    id_ = inquirer.text(message="Enter event ID: ").execute()
+    if id_ != "exit":
+    # id_= input("Enter animal's ID: ")
+        if animal := Animal.find_by_id(id_):
+            animal.delete()
+            print(f'Animal {id_} deleted')
+        else:
+            print(f'Animal {id_} not found')
 
 def display_all_animals():
     animals= Animal.all()
     for animal in animals:
         print(animal)
 
+################ GOOD OPORTUNITY FOR SELECT MENU:
 def find_animal_by_species():
     species= input("Enter animal species: ")
     animals= Animal.find_by_species(species)
@@ -122,18 +129,27 @@ def find_animal_by_species():
         print("None of our animals belong to that species")
 
 def find_animal_by_name():
-    name= input("Enter animal name: ")
-    animal= Animal.find_by_name(name)
-    print(animal) if animal else print(f"Animal {name} not found")
+    print("Type 'exit' to return to Event Menu")
+    name = inquirer.text(message="Enter animal name: ").execute()
+    if name != "exit":
+    # name= input("Enter animal name: ")
+        try:
+            if animal := Animal.find_by_name(name):
+                print(animal)
+        except:
+            print(f"Animal {name} not found")
 
 def animal_clients():
-    id_= input("Enter animal id: ")
-    animal= Animal.find_by_id(id_)
-    if animal:
-        for client in animal.clients():
-            print(client)
-    else:
-        print("Animal doesn't exist")
+    print("Type 'exit' to return to Event Menu")
+    id_ = inquirer.text(message="Enter animal ID: ").execute()
+    if id_ != "exit":
+    # id_= input("Enter animal id: ")
+        animal= Animal.find_by_id(id_)
+        if animal:
+            for client in animal.clients():
+                print(client)
+        else:
+            print("Animal doesn't exist")
 
 
 def create_event():
