@@ -9,6 +9,7 @@ faker = "*"
 pytest = "7.1.3"
 datetime = "*"
 inquirerpy = "*"
+termcolor = "*"
 
 [dev-packages]
 

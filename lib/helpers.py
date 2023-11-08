@@ -5,7 +5,8 @@ from models.client_animal import Client_Animal
 
 from InquirerPy import inquirer, prompt, get_style
 from InquirerPy.base.control import Choice
-from InquirerPy.separator import Separator
+
+from termcolor import colored
 
 ####### PROVIDE OPPORTUNITY TO EXIT INPUT
 def create_client():
@@ -23,7 +24,7 @@ def create_client():
     phone_number= input("Enter the client's phone number: ")
     try:
         client= Client.create(name, type, phone_number)
-        print(f"Success: {client} has been created")
+        print(colored(f"Success: {client} has been created", color="green"))
     except Exception as exc:
         print("Error creating client: ", exc)
     
@@ -34,7 +35,7 @@ def find_client_by_id():
     if id_ != "exit":
         client= Client.find_by_id(id_)
         if client: 
-            print(f"Client {client.id}: {client.name}. Event Type: {client.type}; Phone Number: {client.phone_number}")
+            print(colored(f"Client {client.id}: {client.name}. Event Type: {client.type}; Phone Number: {client.phone_number}", color="green"))
         else: 
             print(f"There is no client with an ID of {id_}")
 
@@ -45,7 +46,7 @@ def delete_client():
     if id_ != "exit":
         if client := Client.find_by_id(id_):
             client.delete()
-            print(f'Client {id_} deleted')
+            print(colored(f'Client {id_} deleted', color="green"))
         else:
             print(f'There is no client with an ID of {id_}')
    
@@ -55,7 +56,7 @@ def client_by_name():
     if name != "exit":
         client = Client.find_by_name(name)
         if client:
-            print(f"Client {client.id}: {client.name}. Event Type: {client.type}; Phone Number: {client.phone_number}")
+            print(colored(f"Client {client.id}: {client.name}. Event Type: {client.type}; Phone Number: {client.phone_number}", color="green"))
         else:
             print(f"There is no client with the name of {name}")
 
@@ -63,7 +64,7 @@ def client_by_name():
 def display_all_clients():
     clients = Client.display_all_clients()
     for client in clients:
-        print(client)
+        print(colored(f"{client}", color="green"))
 
 
 def all_clients_by_type(): 
@@ -81,7 +82,7 @@ def all_clients_by_type():
         clients= Client.view_by_type(choice)
         if clients:
             for client in clients:
-                print(client)
+                print(colored(f"{client}", color="green"))
         else:
             print("No clients have that event type")
     
@@ -95,7 +96,7 @@ def client_animals():
             animals= client.animals()
             if animals:
                 for animal in animals:
-                    print(animal)
+                    print(colored(f"{animal}", color="green"))
             else:
                 print(f"{client.name} hasn't reserved any animals yet.")
         else:
@@ -124,32 +125,32 @@ def create_animal():
                 if skill != "exit":
                     try:
                         animal= Animal.create(name, species, breed, skill)
-                        print(f"Success: {animal} has been created")
+                        print(colored(f"Success: {animal} has been created", color="green"))
                     except Exception as exc:
                         print("Error creating animal: ", exc)
 
 
 def find_animal_by_id():
     print("Type 'exit' to return to Event Menu")
-    id_ = inquirer.text(message="Enter event ID: ").execute()
+    id_ = inquirer.text(message="Enter the animal's ID: ").execute()
     if id_ != "exit":
         animal= Animal.find_by_id(id_)
-        print(f"Name: {animal.name}  Species: {animal.species}  Breed: {animal.breed}  Skill: {animal.skill}") if animal else print(f"There is no animal with an ID of {id_}")
+        print(colored(f"Name: {animal.name}  Species: {animal.species}  Breed: {animal.breed}  Skill: {animal.skill}", color="green")) if animal else print(f"There is no animal with an ID of {id_}")
 
 def delete_animal():
     print("Type 'exit' to return to Event Menu")
-    id_ = inquirer.text(message="Enter event ID: ").execute()
+    id_ = inquirer.text(message="Enter the animal's ID: ").execute()
     if id_ != "exit":
         if animal := Animal.find_by_id(id_):
             animal.delete()
-            print(f'Animal {id_} deleted')
+            print(colored(f'Animal {id_} deleted', color="green"))
         else:
             print(f'There is no animal with an ID of {id_}')
 
 def display_all_animals():
     animals= Animal.all()
     for animal in animals:
-        print(animal)
+        print(colored(f"{animal}", color="green"))
 
 def find_animal_by_species():
     species= inquirer.select(
@@ -165,7 +166,7 @@ def find_animal_by_species():
         animals= Animal.find_by_species(species)
         if animals:
             for animal in animals:
-                print(animal)
+                print(colored(f"{animal}", color="green"))
         else:
             print('No aminals have that species')
 
@@ -175,7 +176,7 @@ def find_animal_by_name():
     if name != "exit":
         try:
             if animal := Animal.find_by_name(name):
-                print(animal)
+                print(colored(f"{animal}", color="green"))
         except:
             print(f"There is no animal with the name of {name}")
 
@@ -188,7 +189,7 @@ def animal_clients():
             clients = animal.clients()
             if clients:
                 for client in clients:
-                    print(client)
+                    print(colored(f"{client}", color="green"))
             else:
                 print(f"{animal.name} doesn't currently have any clients")
         else:
@@ -205,7 +206,7 @@ def create_event():
             if animal_id != "exit":
                 try:
                     new_event = Client_Animal.create(event_date, int(client_id), int(animal_id))
-                    print(f"Event created: {new_event}")
+                    print(colored(f"Event created: {new_event}", color="green"))
                 except Exception as exc:
                     print("Error creating event: ", exc)
 
@@ -216,7 +217,7 @@ def event_details_by_id():
         row = Client_Animal.show_event_details(id_)
         if row:
             pass
-            print(f"Event {row[0]}: {row[1]}, {row[2]} performs at a {row[4]} for {row[3]}")
+            print(colored(f"Event {row[0]}: {row[1]}, {row[2]} performs at a {row[4]} for {row[3]}", color="green"))
         else:
             print(f"Event {id_} not found")
 
@@ -226,14 +227,14 @@ def delete_event():
     if id_ != "exit":
         if event := Client_Animal.find_by_id(id_):
             event.delete()
-            print(f"Event {id_} deleted")
+            print(colored(f"Event {id_} deleted", color="green"))
         else:
             print(f"Event {id_} not found")
 
 def display_all_events():
     events = Client_Animal.view_all()
     for event in events:
-        print(event)
+        print(colored(f"{event}", color="green"))
 
 def event_by_date():
     print("Type 'exit' to return to Event Menu")
@@ -242,7 +243,7 @@ def event_by_date():
         try:
             events = Client_Animal.find_by_date(date)
             for event in events:
-                print(event)
+                print(colored(f"{event}", color="green"))
         except Exception as exc:
             print("Error: ", exc)
 
@@ -262,7 +263,7 @@ def event_by_animal_type():
     if species != None:
         if events := Client_Animal.find_by_animal_type(species):
             for event in events:
-                print(event)
+                print(colored(f"{event}", color="green"))
         else:
             print(f"No events found for animal species: {species}")
 
@@ -280,7 +281,7 @@ def event_by_client_type():
     if event_type != None:
         if events := Client_Animal.find_by_client_type(event_type):
             for event in events:
-                print(event)
+                print(colored(f"{event}", color="green"))
         else:
             print(f"No events found for client event type: {event_type}")
 
@@ -291,7 +292,7 @@ def show_available_animals():
         try:
             if rows := Client_Animal.available_animals(date):
                 for row in rows:
-                    print(f"Animal {row[0]}: {row[1]}, a {row[2]} who is good at {row[4]}")
+                    print(colored(f"Animal {row[0]}: {row[1]}, a {row[2]} who is good at {row[4]}", color="green"))
             else:
                 print(f"No animals available on {date}")
         except Exception as exc:
