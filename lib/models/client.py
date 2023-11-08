@@ -48,7 +48,7 @@ class Client:
                         
 
     def __repr__(self):
-        return f"Client {self.id}: Name: {self.name}, Type of Event: {self.type})" 
+        return f"Client {self.id}: {self.name}" 
 
     @classmethod
     def create_table(cls):
