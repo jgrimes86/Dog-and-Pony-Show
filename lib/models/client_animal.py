@@ -146,7 +146,7 @@ class Client_Animal:
             WHERE clients.type = ?
         """
         events = CURSOR.execute(sql, (type,)).fetchall()
-        [print(cls.from_db(row)) for row in events]
+        return [cls.from_db(row) for row in events]
 
     @classmethod
     def find_by_id(cls, event_id):

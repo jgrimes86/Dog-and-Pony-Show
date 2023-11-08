@@ -163,14 +163,16 @@ def event_by_animal_type():
         default = "Dog"
     ).execute()
     if events := Client_Animal.find_by_animal_type(species):
-        print([event for event in events])
+        for event in events:
+            print(event)
     else:
         print(f"No events found for animal species: {species}")
 
 def event_by_client_type():
     type_ = input("Enter client type: ")
     if events := Client_Animal.find_by_client_type(type_):
-        print([event for event in events])
+        for event in events:
+            print(event)
     else:
         print(f"No events found for client type: {type_}")
 
