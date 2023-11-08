@@ -22,7 +22,13 @@ def create_client():
 def find_client_by_id():
     id_= input("Enter client ID: ")
     client= Client.find_by_id(id_)
-    print(client) if client else print(f"Client {id_} not found")
+    if client: 
+        print(f"Client {client.id}: {client.name}, event type: {client.type}, phone number: {client.phone_number}")
+    
+    
+    
+    else: 
+        print(f"Client {id_} not found")
 
 
 def delete_client():
@@ -46,9 +52,19 @@ def display_all_clients():
         print(client)
 
 
-def all_clients_by_type():
-    type= input('Enter client event type: ')
-    clients= Client.view_by_type(type)
+def all_clients_by_type(): 
+    choice = inquirer.select(
+        message = "Select client type",
+        choices = [
+            "Corporate Seminar",
+            "Team-Building Event",
+            "Birthday Party",
+            Choice(value=None, name="Go Back"),
+        ],
+        default = "name"
+    ).execute()
+# type= input('Enter client event type: ')
+    clients= Client.view_by_type(choice)
     if clients:
         for client in clients:
             print(client)
