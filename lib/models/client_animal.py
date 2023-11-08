@@ -14,7 +14,7 @@ class Client_Animal:
         self.id = id
 
     def __repr__(self):
-        return f"<Event {self.id}: date = {self.event_date}, client = {self.client_id}, animal = {self.animal_id}>"
+        return f"Event {self.id}: Animal {self.animal_id} performing for Client {self.client_id}"
 
     @classmethod
     def date_validator(cls, date):
@@ -151,12 +151,16 @@ class Client_Animal:
     @classmethod
     def find_by_id(cls, event_id):
         sql = """
-            SELECT *
+            SELECT client_animals.id, client_animals.event_date, animals.name, clients.name, clients.type
             FROM client_animals
-            WHERE id = ?
+            LEFT JOIN animals
+            ON client_animals.animal_id = animals.id
+            LEFT JOIN clients
+            ON client_animals.client_id = clients.id
+            WHERE client_animals.id = ?
         """
         row = CURSOR.execute(sql, (event_id,)).fetchone()
-        return cls.from_db(row) if row else None
+        return row if row else None
 
     @classmethod
     def available_animals(cls, date):

@@ -132,8 +132,12 @@ def create_event():
 
 def find_event_by_id():
     id_ = input("Enter event ID: ")
-    event = Client_Animal.find_by_id(id_)
-    print(event) if event else print(f"Event {id_} not found")
+    row = Client_Animal.find_by_id(id_)
+    if row:
+        pass
+        print(f"Event {row[0]}: {row[1]}, {row[2]} performs at a {row[4]} for {row[3]}")
+    else:
+        print(f"Event {id_} not found")
 
 def delete_event():
     id_ = input("Enter event ID: ")
@@ -163,7 +167,7 @@ def event_by_animal_type():
         choices = [
             "Dog",
             "Pony",
-            Choice(value=None, name="Go Back"),
+            Choice(value=None, name="Return to Event Menu"),
         ],
         default = "Dog"
     ).execute()
@@ -174,12 +178,21 @@ def event_by_animal_type():
         print(f"No events found for animal species: {species}")
 
 def event_by_client_type():
-    type_ = input("Enter client event type: ")
-    if events := Client_Animal.find_by_client_type(type_):
+    event_type = inquirer.select(
+        message = "Select event type",
+        choices = [
+            "Corporate Seminar",
+            "Team-Building Event",
+            "Birthday Party",
+            Choice(value=None, name="Return to Event Menu")
+        ],
+        default = "Corporate Seminar"
+    ).execute()
+    if events := Client_Animal.find_by_client_type(event_type):
         for event in events:
             print(event)
     else:
-        print(f"No events found for client event type: {type_}")
+        print(f"No events found for client event type: {event_type}")
 
 def show_available_animals():
     date = input("Enter date: ")
