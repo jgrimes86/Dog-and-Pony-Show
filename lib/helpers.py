@@ -10,7 +10,16 @@ from InquirerPy.separator import Separator
 ####### PROVIDE OPPORTUNITY TO EXIT INPUT
 def create_client():
     name= input("Enter the client's name: ")
-    type= input("Enter the client's event type (Corporate Seminar, Team-Building Event, or Birthday Party): ")
+    type= inquirer.select(
+        message= "Select client's event type",
+        choices= [
+            "Corporate Seminar",
+            "Team-Building Event",
+            "Birthday Party",
+        ],
+        default= "Corporate Seminar"
+    ).execute()
+    print("Required phone number format: xxx-xxx-xxxx ")
     phone_number= input("Enter the client's phone number: ")
     try:
         client= Client.create(name, type, phone_number)
@@ -88,14 +97,22 @@ def client_animals():
                 for animal in animals:
                     print(animal)
             else:
-                print(f"This client hasn't reserved any animals yet.")
+                print(f"{client.name} hasn't reserved any animals yet.")
         else:
             print(f"There is no animal with an ID of {id_}")
+
 
 ######### PROVIDE OPPORTUNITY TO EXIT INPUT
 def create_animal():
     name= input("Enter the animal's name: ")
-    species= input("Enter the animal's species (Dog or Pony): ")
+    species= inquirer.select(
+        message= "Select animal's species",
+        choices= [
+            "Dog",
+            "Pony"
+        ],
+        default= 'Dog'
+    ).execute()
     breed= input("Enter the animal's breed: ")
     skill= input("Enter the animal's skill: ")
     try:
@@ -166,7 +183,7 @@ def animal_clients():
                 for client in clients:
                     print(client)
             else:
-                print("This animal doesn't currently have any clients")
+                print(f"{animal.name} doesn't currently have any clients")
         else:
             print(f"There is no animal with an ID of {id_}")
 
