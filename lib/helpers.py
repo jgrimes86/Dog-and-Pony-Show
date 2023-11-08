@@ -3,6 +3,14 @@ from models.animal import Animal
 from models.client import Client
 from models.client_animal import Client_Animal
 
+# import sqlite3
+from InquirerPy import inquirer
+from InquirerPy.base.control import Choice
+from InquirerPy.separator import Separator
+
+def create_client(name,client_type,contact_info):
+    new_client = Client.create(name, client_type, contact_info)
+    return new_client
 def create_client():
     name= input("Enter the client's name: ")
     type= input("Enter the client's event type: ")
@@ -153,16 +161,26 @@ def event_by_date():
         print("Error: ", exc)
 
 def event_by_animal_type():
-    type_ = input("Enter animal species: ")
-    if events := Client_Animal.find_by_animal_type(type_):
-        print([event for event in events])
+    species = inquirer.select(
+        message = "Select animal type",
+        choices = [
+            "Dog",
+            "Pony",
+            Choice(value=None, name="Go Back"),
+        ],
+        default = "Dog"
+    ).execute()
+    if events := Client_Animal.find_by_animal_type(species):
+        for event in events:
+            print(event)
     else:
-        print(f"No events found for animal species: {type_}")
+        print(f"No events found for animal species: {species}")
 
 def event_by_client_type():
     type_ = input("Enter client event type: ")
     if events := Client_Animal.find_by_client_type(type_):
-        print([event for event in events])
+        for event in events:
+            print(event)
     else:
         print(f"No events found for client event type: {type_}")
 

@@ -146,7 +146,7 @@ class Client_Animal:
             WHERE clients.type = ?
         """
         events = CURSOR.execute(sql, (type,)).fetchall()
-        [print(cls.from_db(row)) for row in events]
+        return [cls.from_db(row) for row in events]
 
     @classmethod
     def find_by_id(cls, event_id):
@@ -164,11 +164,12 @@ class Client_Animal:
         try:
             if cls.date_validator(date):
                 sql = """
-                    SELECT animals.*
-                    FROM animals
-                    LEFT JOIN client_animals
+                    SELECT animals.* FROM animals
+                    EXCEPT
+                    SELECT animals.* FROM animals
+                    INNER JOIN client_animals
                     ON animals.id = client_animals.animal_id
-                    WHERE (event_date != ?) OR (event_date IS NULL)
+                    WHERE (event_date IS ?)
                 """
                 if animals := CURSOR.execute(sql, (date,)).fetchall():
                     return [row for row in animals]

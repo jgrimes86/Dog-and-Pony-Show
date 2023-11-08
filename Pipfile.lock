@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "dfd17bf5b081fdcfece562f3271a53b3c140e608cee7702dcfe30222d8e228fd"
+            "sha256": "2f2c7b01850702cad537753c45e5f29c20ad37774ffc48aef5134df58dbc0c21"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -78,6 +78,14 @@
             "markers": "python_version >= '3.7'",
             "version": "==2.0.0"
         },
+        "inquirerpy": {
+            "hashes": [
+                "sha256:89d2ada0111f337483cb41ae31073108b2ec1e618a49d7110b0d7ade89fc197e",
+                "sha256:c65fdfbac1fa00e3ee4fb10679f4d3ed7a012abf4833910e63c295827fe2a7d4"
+            ],
+            "index": "pypi",
+            "version": "==0.3.4"
+        },
         "ipdb": {
             "hashes": [
                 "sha256:45529994741c4ab6d2388bfa5d7b725c2cf7fe9deffabdb8a6113aa5ed449ed4",
@@ -133,6 +141,14 @@
             ],
             "markers": "sys_platform != 'win32'",
             "version": "==4.8.0"
+        },
+        "pfzy": {
+            "hashes": [
+                "sha256:5f50d5b2b3207fa72e7ec0ef08372ef652685470974a107d0d4999fc5a903a96",
+                "sha256:717ea765dd10b63618e7298b2d98efd819e0b30cd5905c9707223dceeb94b3f1"
+            ],
+            "markers": "python_version >= '3.7' and python_version < '4.0'",
+            "version": "==0.3.4"
         },
         "pickleshare": {
             "hashes": [
