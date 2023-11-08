@@ -18,7 +18,7 @@ class Client_Animal:
 
     @classmethod
     def date_validator(cls, date):
-        if datetime.strptime(date, "%b %d, %Y"):
+        if datetime.strptime(date, "%B %d, %Y"):
             return True
         else:
             return False
@@ -33,7 +33,7 @@ class Client_Animal:
             if Client_Animal.date_validator(event_date):
                 self._event_date = event_date
         except ValueError:
-            raise ValueError("Date must match the format of Nov 06, 2023")
+            raise ValueError("Date must match the format of November 06, 2023")
 
     @property
     def client_id(self):
@@ -132,7 +132,7 @@ class Client_Animal:
                 else:
                     raise Exception(f"No events scheduled on {date}")
         except ValueError:
-            raise ValueError("Date must match the format of Nov 06, 2023")        
+            raise ValueError("Date must match the format of November 06, 2023")        
 
     @classmethod
     def find_by_animal_type(cls, type):
@@ -198,7 +198,7 @@ class Client_Animal:
                 else:
                     return None
         except ValueError:
-            raise ValueError("Date must match the format of Nov 06, 2023")
+            raise ValueError("Date must match the format of November 06, 2023")
 
 
 # ipdb.set_trace()

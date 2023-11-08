@@ -53,6 +53,7 @@ def home_menu():
     print("2. Go to Animal Menu")
     print("3. Go to Event Menu")
     print("0. Exit the program")
+    print()
 
 
 def client():
@@ -92,6 +93,7 @@ def client_menu():
     print("6. Find client by event type")
     print("7. Show all animals rented by a client")
     print("0. Return to Home Menu")
+    print()
 
 
 def animal():
@@ -131,6 +133,7 @@ def animal_menu():
     print("6. Find animal by name")
     print("7. Show all clients of an animal")
     print("0. Return to Home Menu")
+    print()
 
 
 def event():
@@ -173,6 +176,7 @@ def event_menu():
     print("7. Show events by client event type")
     print("8. Show animals available on date")
     print("0. Return to Home Menu")
+    print()
 
 
 
