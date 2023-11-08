@@ -1,13 +1,11 @@
 from models.config import CONN, CURSOR
-import ipdb
 
 class Client:
 
-    def __init__(self, name, type, contact_info, id=None):
+    def __init__(self, name, type, phone_number, id= None):
         self.name= name
         self.type= type
-        self.contact_info= contact_info
-        self.id = id 
+        self.phone_number= phone_number
 
     def __repr__(self):
         return f"Client {self.id}: Name: {self.name}, Reason: {self.type})" 
@@ -19,12 +17,12 @@ class Client:
             id INTEGER PRIMARY KEY, 
             name TEXT,
             type TEXT,
-            contact_info TEXT
+            phone_number TEXT
         )
         """
         CURSOR.execute(sql)
         CONN.commit()
-        
+
     @classmethod
     def drop_table(cls):
         sql= "DROP TABLE clients;"
@@ -33,15 +31,15 @@ class Client:
 
     def save(self):
         sql= """
-        INSERT INTO clients (name, type, contact_info) VALUES (?, ?, ?)
+        INSERT INTO clients (name, type, phone_number) VALUES (?, ?, ?)
         """
-        CURSOR.execute(sql, (self.name, self.type, self.contact_info))
+        CURSOR.execute(sql, (self.name, self.type, self.phone_number))
         CONN.commit()
         self.id= CURSOR.lastrowid
 
     @classmethod
-    def create(cls, name, type, contact_info):
-        client= cls(name, type, contact_info)
+    def create(cls, name, type, phone_number):
+        client= cls(name, type, phone_number)
         client.save()
         return client 
     
@@ -72,7 +70,7 @@ class Client:
         return [cls.from_db(row) for row in rows]  
 
     @classmethod
-    def view_by_type(cls,type):  
+    def view_by_type(cls, type):  
         rows = CURSOR.execute("SELECT * FROM clients WHERE type is ?", (type,)).fetchall()
         return [cls.from_db(row) for row in rows] 
     

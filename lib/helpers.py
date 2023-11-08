@@ -5,9 +5,15 @@ from models.client_animal import Client_Animal
 
 import sqlite3
 
-def create_client(name,client_type,contact_info):
-    new_client = Client.create(name, client_type, contact_info)
-    return new_client
+def create_client():
+    name= input("Enter the client's name: ")
+    type= input("Enter the client's type: ")
+    phone_number= input("Enter the client's phone number: ")
+    try:
+        client= Client.create(name, type, phone_number)
+        print(f"Success: {client}")
+    except Exception as exc:
+        print("Error creating client: ", exc)
     
 
 def find_client_by_id():
@@ -15,39 +21,36 @@ def find_client_by_id():
     client= Client.find_by_id(id_)
     print(client) if client else print(f"Client {id_} not found")
 
+
 def delete_client():
-    id_=input("Enter client ID:")
-    client= Client.find_by_id(id_)
-    if client:
+    id_= input("Enter client's ID: ")
+    if client := Client.find_by_id(id_):
         client.delete()
-        print(f"Client{id_} deleted successfully")
-    else: 
-        print(f"Client{id_} deletion failed")
+        print(f'Client {id_} deleted')
+    else:
+        print(f'Client {id_} not found')
    
 
 def client_by_name():
     name = input("Enter client name: ")
-    clients = Client.find_by_name(name)
+    client = Client.find_by_name(name)
+    print(client) if client else print(f"Client {name} not found")
+
+
+def display_all_clients():
+    clients = Client.display_all_clients()
+    for client in clients:
+        print(client)
+
+
+def all_clients_by_type():
+    type= input('Enter client type: ')
+    clients= Client.view_by_type(type)
     if clients:
         for client in clients:
             print(client)
     else:
-        print(f"No clients found with the name{name}.")
-
-    
-
-def display_all_clients():
-    clients = Client.display_all_clients()
-    if clients:
-        for client in clients:
-            print(client)
-        else:
-            print("no clients found.")
-    
-
-def all_clients_by_type(client_type):
-    return Client.view_by_type(client_type)
-
+        print("No clients have that type")
     
 
 def client_animals():
@@ -59,7 +62,6 @@ def client_animals():
     else:
         print("Client doesn't exist")
 
- 
 
 def create_animal():
     name= input("Enter the animal's name: ")
@@ -86,7 +88,6 @@ def delete_animal():
     else:
         print(f'Animal {id_} not found')
 
-
 def display_all_animals():
     animals= Animal.all()
     for animal in animals:
@@ -94,8 +95,12 @@ def display_all_animals():
 
 def find_animal_by_species():
     species= input("Enter animal species: ")
-    animal= Animal.find_by_species(species)
-    print(animal) if animal else print(f"There are no animals with the species {species}")
+    animals= Animal.find_by_species(species)
+    if animals:
+        for animal in animals:
+            print(animal)
+    else:
+        print("None of our animals belong to that species")
 
 def find_animal_by_name():
     name= input("Enter animal name: ")
