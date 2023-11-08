@@ -29,7 +29,7 @@ def create_client():
     
 
 def find_client_by_id():
-    print("Type 'exit' to return to Event Menu")
+    print("Type 'exit' to return to Client Menu")
     id_ = inquirer.text(message="Enter client ID: ").execute()
     if id_ != "exit":
         client= Client.find_by_id(id_)
@@ -40,7 +40,7 @@ def find_client_by_id():
 
 
 def delete_client():
-    print("Type 'exit' to return to Event Menu")
+    print("Type 'exit' to return to Client Menu")
     id_ = inquirer.text(message="Enter event ID: ").execute()
     if id_ != "exit":
         if client := Client.find_by_id(id_):
@@ -50,7 +50,7 @@ def delete_client():
             print(f'There is no client with an ID of {id_}')
    
 def client_by_name():
-    print("Type 'exit' to return to Event Menu")
+    print("Type 'exit' to return to Client Menu")
     name = inquirer.text(message="Enter client name: ").execute()
     if name != "exit":
         client = Client.find_by_name(name)
@@ -87,7 +87,7 @@ def all_clients_by_type():
     
 
 def client_animals():
-    print("Type 'exit' to return to Event Menu")
+    print("Type 'exit' to return to Client Menu")
     id_ = inquirer.text(message="Enter event ID: ").execute()
     if id_ != "exit":
         client= Client.find_by_id(id_)
@@ -123,14 +123,14 @@ def create_animal():
 
 
 def find_animal_by_id():
-    print("Type 'exit' to return to Event Menu")
+    print("Type 'exit' to return to Animal Menu")
     id_ = inquirer.text(message="Enter event ID: ").execute()
     if id_ != "exit":
         animal= Animal.find_by_id(id_)
         print(f"Name: {animal.name}  Species: {animal.species}  Breed: {animal.breed}  Skill: {animal.skill}") if animal else print(f"There is no animal with an ID of {id_}")
 
 def delete_animal():
-    print("Type 'exit' to return to Event Menu")
+    print("Type 'exit' to return to Animal Menu")
     id_ = inquirer.text(message="Enter event ID: ").execute()
     if id_ != "exit":
         if animal := Animal.find_by_id(id_):
@@ -163,7 +163,7 @@ def find_animal_by_species():
             print('No aminals have that species')
 
 def find_animal_by_name():
-    print("Type 'exit' to return to Event Menu")
+    print("Type 'exit' to return to Animal Menu")
     name = inquirer.text(message="Enter animal name: ").execute()
     if name != "exit":
         try:
@@ -173,7 +173,7 @@ def find_animal_by_name():
             print(f"There is no animal with the name of {name}")
 
 def animal_clients():
-    print("Type 'exit' to return to Event Menu")
+    print("Type 'exit' to return to Animal Menu")
     id_ = inquirer.text(message="Enter animal ID: ").execute()
     if id_ != "exit":
         animal= Animal.find_by_id(id_)
