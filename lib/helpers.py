@@ -8,25 +8,30 @@ from InquirerPy.base.control import Choice
 
 from termcolor import colored
 
-####### PROVIDE OPPORTUNITY TO EXIT INPUT
 def create_client():
-    name= input("Enter the client's name: ")
-    type= inquirer.select(
-        message= "Select client's event type",
-        choices= [
-            "Corporate Seminar",
-            "Team-Building Event",
-            "Birthday Party",
-        ],
-        default= "Corporate Seminar"
-    ).execute()
-    print("Required phone number format: xxx-xxx-xxxx ")
-    phone_number= input("Enter the client's phone number: ")
-    try:
-        client= Client.create(name, type, phone_number)
-        print(colored(f"Success: {client} has been created", color="green"))
-    except Exception as exc:
-        print("Error creating client: ", exc)
+    print("Type 'exit' to return to Client Menu")
+    name = inquirer.text(message="Enter the client's name: ").execute()
+    if name != "exit":
+        type= inquirer.select(
+            message= "Select client's event type",
+            choices= [
+                "Corporate Seminar",
+                "Team-Building Event",
+                "Birthday Party",
+                Choice(value=None, name="Return to Client Menu"),
+            ],
+            default= "Corporate Seminar"
+        ).execute()
+        if type != None:
+            print("Type 'exit' to return to Client Menu")
+            print("Required phone number format: xxx-xxx-xxxx ")
+            phone_number = inquirer.text(message="Enter the client's phone number: ").execute()
+            if phone_number != "exit":
+                try:
+                    client= Client.create(name, type, phone_number)
+                    print(colored(f"Success: {client} has been created", color="green"))
+                except Exception as exc:
+                    print("Error creating client: ", exc)
     
 
 def find_client_by_id():
@@ -247,8 +252,6 @@ def event_by_date():
         except Exception as exc:
             print("Error: ", exc)
 
-# style = get_style({'questionmark': "#e5c07b"})
-
 def event_by_animal_type():
     species = inquirer.select(
         message = "Select animal type",
@@ -258,7 +261,6 @@ def event_by_animal_type():
             Choice(value=None, name="Return to Event Menu"),
         ],
         default = "Dog",
-        # style = style
     ).execute()
     if species != None:
         if events := Client_Animal.find_by_animal_type(species):

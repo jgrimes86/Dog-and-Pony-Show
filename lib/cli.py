@@ -1,5 +1,7 @@
 # lib/cli.py
 
+from termcolor import colored
+
 from helpers import (
     create_client,
     find_client_by_id,
@@ -30,8 +32,8 @@ from helpers import (
 def home():
     while True:
         print()
-        print("THE DOG AND PONY SHOW")
-        print("***Home Menu***")
+        print(colored("THE DOG AND PONY SHOW", color="blue"))
+        print(colored("***Home Menu***", color="blue"))
         print()
         home_menu()
         choice = input("> ")
@@ -59,7 +61,7 @@ def home_menu():
 def client():
     while True:
         print()
-        print("***Client Menu***")
+        print(colored("***Client Menu***", color="blue"))
         print()
         client_menu()
         choice = input("> ")
@@ -99,7 +101,7 @@ def client_menu():
 def animal():
     while True:
         print()
-        print("***Animal Menu***")    
+        print(colored("***Animal Menu***", color="blue"))
         print()    
         animal_menu()
         choice = input("> ")
@@ -139,7 +141,7 @@ def animal_menu():
 def event():
     while True:
         print()
-        print("***Event Menu***")
+        print(colored("***Event Menu***", color="blue"))
         print()
         event_menu()
         choice = input("> ")
