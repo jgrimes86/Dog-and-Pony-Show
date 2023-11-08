@@ -68,7 +68,7 @@ def client_animals():
 
 def create_animal():
     name= input("Enter the animal's name: ")
-    species= input("Enter the animal's species: ")
+    species= input("Enter the animal's species (Dog or Pony): ")
     breed= input("Enter the animal's breed: ")
     skill= input("Enter the animal's skill: ")
     try:
@@ -81,7 +81,7 @@ def create_animal():
 def find_animal_by_id():
     id_= input("Enter animal ID: ")
     animal= Animal.find_by_id(id_)
-    print(animal) if animal else print(f"Animal {id_} not found")
+    print(f"Name: {animal.name}  Species: {animal.species}  Breed: {animal.breed}  Skill: {animal.skill}") if animal else print(f"There is no animal with an ID of {id_}")
 
 def delete_animal():
     id_= input("Enter animal's ID: ")
@@ -89,7 +89,7 @@ def delete_animal():
         animal.delete()
         print(f'Animal {id_} deleted')
     else:
-        print(f'Animal {id_} not found')
+        print(f'There is no animal with an ID of {id_}')
 
 def display_all_animals():
     animals= Animal.all()
@@ -97,27 +97,39 @@ def display_all_animals():
         print(animal)
 
 def find_animal_by_species():
-    species= input("Enter animal species: ")
+    species= inquirer.select(
+        message= "Select animal type",
+        choices= [
+            "Dog",
+            "Pony",
+            Choice(value=None, name="Go Back")
+        ],
+        default = "Dog"
+    ).execute()
     animals= Animal.find_by_species(species)
-    if animals:
-        for animal in animals:
-            print(animal)
-    else:
-        print("None of our animals belong to that species")
+    for animal in animals:
+        print(animal)
 
 def find_animal_by_name():
     name= input("Enter animal name: ")
-    animal= Animal.find_by_name(name)
-    print(animal) if animal else print(f"Animal {name} not found")
+    try:
+        animal= Animal.find_by_name(name)
+        print(animal)
+    except: 
+        print(f"There is no animal with the name of {name}")
 
 def animal_clients():
     id_= input("Enter animal id: ")
     animal= Animal.find_by_id(id_)
     if animal:
-        for client in animal.clients():
-            print(client)
+        clients = animal.clients()
+        if clients:
+            for client in clients:
+                print(client)
+        else:
+            print("This animal doesn't currently have any clients")
     else:
-        print("Animal doesn't exist")
+        print(f"There is no animal with an ID of {id_}")
 
 
 def create_event():

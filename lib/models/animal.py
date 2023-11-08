@@ -27,10 +27,10 @@ class Animal:
     def species(self, species):
         if not hasattr(self, '_species'):
             if type(species) == str:
-                if species == 'Dog' or species == 'dog' or species == 'Pony' or species == 'pony':
+                if species == 'Dog' or species == 'Pony':
                     self._species= species
                 else:
-                    raise ValueError('Species options: dog, pony')
+                    raise ValueError('Species options: Dog, Pony')
             else:
                 raise TypeError('Species must be a string')
         else:
