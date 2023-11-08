@@ -158,7 +158,7 @@ def event_by_animal_type():
         choices = [
             "Dog",
             "Pony",
-            Choice(value=None, name="Exit"),
+            Choice(value=None, name="Go Back"),
         ],
         default = "Dog"
     ).execute()
