@@ -23,7 +23,6 @@ def create_client():
             default= "Corporate Seminar"
         ).execute()
         if type != None:
-            # print("Type 'exit' to return to Client Menu")
             print("Required phone number format: xxx-xxx-xxxx ")
             phone_number = inquirer.text(message="Enter the client's phone number: ").execute()
             if phone_number != "exit":
@@ -122,14 +121,8 @@ def create_animal():
             default= 'Dog'
         ).execute()
         if species != None:
-<<<<<<< HEAD
-            print("Type 'exit' to return to Animal Menu")
-=======
-            # print("Type 'exit' to return to Event Menu")
->>>>>>> main
             breed = inquirer.text(message="Enter the animal's breed: ").execute()
             if breed != "exit":
-                # print("Type 'exit' to return to Event Menu")
                 skill = inquirer.text(message="Enter the animal's skill: ").execute()
                 if skill != "exit":
                     try:
@@ -185,7 +178,7 @@ def find_animal_by_name():
     if name != "exit":
         try:
             if animal := Animal.find_by_name(name):
-                print(colored(f"{animal}", color="green"))
+                print(colored(f"Name: {animal.name}  Species: {animal.species}  Breed: {animal.breed}  Skill: {animal.skill}", color="green"))
         except:
             print(f"There is no animal with the name of {name}")
 
