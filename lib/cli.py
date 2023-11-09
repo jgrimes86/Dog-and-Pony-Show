@@ -32,8 +32,8 @@ from helpers import (
 def home():
     while True:
         print()
-        print(colored("THE DOG AND PONY SHOW", color="blue"))
-        print(colored("***Home Menu***", color="blue"))
+        print(colored("THE DOG AND PONY SHOW", color="light_blue"))
+        print(colored("***Home Menu***", color="light_blue"))
         print()
         home_menu()
         choice = input("> ")
@@ -61,7 +61,7 @@ def home_menu():
 def client():
     while True:
         print()
-        print(colored("***Client Menu***", color="blue"))
+        print(colored("***Client Menu***", color="light_blue"))
         print()
         client_menu()
         choice = input("> ")
@@ -101,7 +101,7 @@ def client_menu():
 def animal():
     while True:
         print()
-        print(colored("***Animal Menu***", color="blue"))
+        print(colored("***Animal Menu***", color="light_blue"))
         print()    
         animal_menu()
         choice = input("> ")
@@ -141,7 +141,7 @@ def animal_menu():
 def event():
     while True:
         print()
-        print(colored("***Event Menu***", color="blue"))
+        print(colored("***Event Menu***", color="light_blue"))
         print()
         event_menu()
         choice = input("> ")
