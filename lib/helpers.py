@@ -10,7 +10,7 @@ from termcolor import colored
 
 def create_client():
     print("Type 'exit' to return to Client Menu")
-    name = inquirer.text(message="Enter the client's name: ").execute()
+    name = inquirer.text(message= "Enter the client's name: ").execute()
     if name != "exit":
         type= inquirer.select(
             message= "Select client's event type",
@@ -36,7 +36,7 @@ def create_client():
 
 def find_client_by_id():
     print("Type 'exit' to return to Client Menu")
-    id_ = inquirer.text(message="Enter client ID: ").execute()
+    id_ = inquirer.text(message= "Enter client ID: ").execute()
     if id_ != "exit":
         client= Client.find_by_id(id_)
         if client: 
@@ -47,7 +47,7 @@ def find_client_by_id():
 
 def delete_client():
     print("Type 'exit' to return to Client Menu")
-    id_ = inquirer.text(message="Enter event ID: ").execute()
+    id_ = inquirer.text(message="Enter client ID: ").execute()
     if id_ != "exit":
         if client := Client.find_by_id(id_):
             client.delete()
@@ -57,7 +57,7 @@ def delete_client():
    
 def client_by_name():
     print("Type 'exit' to return to Client Menu")
-    name = inquirer.text(message="Enter client name: ").execute()
+    name = inquirer.text(message= "Enter client name: ").execute()
     if name != "exit":
         client = Client.find_by_name(name)
         if client:
@@ -94,7 +94,7 @@ def all_clients_by_type():
 
 def client_animals():
     print("Type 'exit' to return to Client Menu")
-    id_ = inquirer.text(message="Enter event ID: ").execute()
+    id_ = inquirer.text(message= "Enter client ID: ").execute()
     if id_ != "exit":
         client= Client.find_by_id(id_)
         if client:
@@ -109,7 +109,7 @@ def client_animals():
 
 
 def create_animal():
-    print("Type 'exit' to return to Event Menu")
+    print("Type 'exit' to return to Animal Menu")
     name = inquirer.text(message="Enter the animal's name: ").execute()
     if name != "exit":
         species= inquirer.select(
@@ -122,7 +122,7 @@ def create_animal():
             default= 'Dog'
         ).execute()
         if species != None:
-            print("Type 'exit' to return to Event Menu")
+            print("Type 'exit' to return to Animal Menu")
             breed = inquirer.text(message="Enter the animal's breed: ").execute()
             if breed != "exit":
                 print("Type 'exit' to return to Event Menu")
@@ -203,6 +203,7 @@ def animal_clients():
 
 def create_event():
     print("Type 'exit' to return to Event Menu")
+    print("Date must match the format of November 06, 2023")
     event_date = inquirer.text(message="Enter event date: ").execute()
     if event_date != "exit":
         client_id = inquirer.text(message="Enter client ID: ").execute()
