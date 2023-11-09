@@ -23,7 +23,7 @@ from helpers import (
     display_all_events,
     event_by_date,
     event_by_animal_type,
-    event_by_client_type,
+    event_by_event_type,
     show_available_animals,
     exit_program
 )
@@ -161,7 +161,7 @@ def event():
         elif choice == "6":
             event_by_animal_type()
         elif choice == "7":
-            event_by_client_type()
+            event_by_event_type()
         elif choice == "8":
             show_available_animals()        
         else:

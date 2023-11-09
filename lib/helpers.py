@@ -23,7 +23,7 @@ def create_client():
             default= "Corporate Seminar"
         ).execute()
         if type != None:
-            print("Type 'exit' to return to Client Menu")
+            # print("Type 'exit' to return to Client Menu")
             print("Required phone number format: xxx-xxx-xxxx ")
             phone_number = inquirer.text(message="Enter the client's phone number: ").execute()
             if phone_number != "exit":
@@ -122,10 +122,14 @@ def create_animal():
             default= 'Dog'
         ).execute()
         if species != None:
+<<<<<<< HEAD
             print("Type 'exit' to return to Animal Menu")
+=======
+            # print("Type 'exit' to return to Event Menu")
+>>>>>>> main
             breed = inquirer.text(message="Enter the animal's breed: ").execute()
             if breed != "exit":
-                print("Type 'exit' to return to Event Menu")
+                # print("Type 'exit' to return to Event Menu")
                 skill = inquirer.text(message="Enter the animal's skill: ").execute()
                 if skill != "exit":
                     try:
@@ -200,7 +204,6 @@ def animal_clients():
         else:
             print(f"There is no animal with an ID of {id_}")
 
-
 def create_event():
     print("Type 'exit' to return to Event Menu")
     print("Date must match the format of November 06, 2023")
@@ -211,8 +214,8 @@ def create_event():
             animal_id = inquirer.text(message="Enter animal ID: ").execute()
             if animal_id != "exit":
                 try:
-                    new_event = Client_Animal.create(event_date, int(client_id), int(animal_id))
-                    print(colored(f"Event created: {new_event}", color="green"))
+                    if new_event := Client_Animal.create(event_date, int(client_id), int(animal_id)):
+                        print(colored(f"Event created: {new_event}", color="green"))
                 except Exception as exc:
                     print("Error creating event: ", exc)
 
@@ -231,7 +234,7 @@ def delete_event():
     print("Type 'exit' to return to Event Menu")
     id_ = inquirer.text(message="Enter event ID: ").execute()
     if id_ != "exit":
-        if event := Client_Animal.find_by_id(id_):
+        if event := Client_Animal.find_by_id(int(id_)):
             event.delete()
             print(colored(f"Event {id_} deleted", color="green"))
         else:
@@ -270,7 +273,7 @@ def event_by_animal_type():
         else:
             print(f"No events found for animal species: {species}")
 
-def event_by_client_type():
+def event_by_event_type():
     event_type = inquirer.select(
         message = "Select event type",
         choices = [

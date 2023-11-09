@@ -87,18 +87,22 @@ class Client_Animal:
         self.id= CURSOR.lastrowid
 
     @classmethod
+    def availability_validator(cls, animal_id, event_date):
+        animal_ids = [int(animal[0]) for animal in cls.available_animals(event_date)]
+        if animal_id in animal_ids:
+            return animal_id
+        else:
+            raise Exception(f"Animal {animal_id} not available on {event_date}")
+
+    @classmethod
     def create(cls, event_date, client_id, animal_id):
         try:
-            available_animals = cls.available_animals(event_date)
-            ids = [int(animal[0]) for animal in available_animals]
-            if animal_id in ids:
-                event = cls(event_date, client_id, animal_id)
-                event.save()
-                return event
-            else:
-                raise Exception(f"Animal {animal_id} not available on {event_date}")
+            event = cls(event_date, client_id, animal_id)
+            cls.availability_validator(animal_id, event_date)
+            event.save()
+            return event
         except Exception as exc:
-            return exc
+            print("Error creating event: ", exc)
 
     def delete(self):
         sql = """
